@@ -57,7 +57,7 @@ This MCP server provides powerful tools for generating various types of GenLayer
 
 ```bash
 # Clone the repository
-git clone https://github.com/genlayer-protocol/genlayer-mcp-server.git
+git clone https://github.com/albert-mr/genlayer-mcp-server.git
 cd genlayer-mcp-server
 
 # Install dependencies
@@ -454,8 +454,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/genlayer-protocol/genlayer-mcp-server/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/genlayer-protocol/genlayer-mcp-server/discussions)
+- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/albert-mr/genlayer-mcp-server/issues)
+- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/albert-mr/genlayer-mcp-server/discussions)
 - 💬 **Community Support**: [Discord](https://discord.gg/8Jm4v89VAu)
 - 📧 **Direct Contact**: [support@genlayer.com](mailto:support@genlayer.com)
 

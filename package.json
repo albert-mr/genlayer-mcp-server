@@ -48,10 +48,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/genlayer-protocol/genlayer-mcp.git"
+    "url": "https://github.com/albert-mr/genlayer-mcp-server.git"
   },
-  "homepage": "https://docs.genlayer.com/",
+  "homepage": "https://github.com/albert-mr/genlayer-mcp-server",
   "bugs": {
-    "url": "https://github.com/genlayer-protocol/genlayer-mcp/issues"
+    "url": "https://github.com/albert-mr/genlayer-mcp-server/issues"
   }
 }
