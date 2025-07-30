@@ -1,0 +1,17 @@
+# Global ownership - albert-mr owns everything by default
+* @albert-mr
+
+# Core files require extra scrutiny
+package.json @albert-mr
+package-lock.json @albert-mr
+tsconfig.json @albert-mr
+.github/ @albert-mr
+
+# Source code ownership
+src/ @albert-mr
+tests/ @albert-mr
+
+# Documentation
+README.md @albert-mr
+CLAUDE.md @albert-mr
+LICENSE @albert-mr
