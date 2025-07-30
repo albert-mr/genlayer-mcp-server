@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discord Community
+    url: https://discord.gg/8Jm4v89VAu
+    about: Join the GenLayer Discord for community support and discussions
+  - name: 📖 Documentation
+    url: https://docs.genlayer.com/
+    about: Check the GenLayer documentation for guides and examples
+  - name: 🚀 GenLayer Studio
+    url: https://studio.genlayer.com/
+    about: Try GenLayer Studio for browser-based contract development
