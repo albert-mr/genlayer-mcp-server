@@ -424,14 +424,19 @@ class ${marketName}(gl.Contract):
     // Map common types to GenLayer types
     const typeMap: { [key: string]: string } = {
       string: "str",
+      text: "str",  
       integer: "u256",
       int: "u256",
+      number: "u256",
       boolean: "bool",
       bool: "bool",
       address: "Address",
-      list: "DynArray",
-      dict: "TreeMap",
-      dictionary: "TreeMap",
+      list: "DynArray[str]",
+      dict: "TreeMap[str, str]",
+      dictionary: "TreeMap[str, str]",
+      float: "f64",
+      decimal: "f64",
+      bytes: "bytes",
     };
 
     return typeMap[type.toLowerCase()] || type;
