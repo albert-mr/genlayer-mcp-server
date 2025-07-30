@@ -333,36 +333,99 @@ npm run test:server
 
 ## 🏗️ Architecture
 
+### Project Structure
+
 ```
 genlayer-mcp-server/
-├── src/
-│   ├── index.ts                 # Main MCP server entry point (stdio)
-│   ├── server.ts                # MCP server factory
-│   ├── tools/
-│   │   ├── toolRegistry.ts      # Tool registration and handling
-│   │   ├── toolDefinitions.ts   # Tool schema definitions
-│   │   └── genLayerTools.ts     # GenLayer-specific tool implementations
-│   ├── utils/
-│   │   └── contractGenerator.ts # Contract generation utilities
-│   └── config/
-│       └── tools.ts             # Configuration constants
-├── tests/
-│   ├── tools.test.ts            # Tool unit tests
-│   ├── contractGenerator.test.ts # Generator unit tests
-│   ├── integration.test.ts      # Integration tests
-│   └── setup.ts                 # Test configuration
-├── dist/                        # Compiled JavaScript output
-├── coverage/                    # Test coverage reports
-├── INSTALL.md                   # Complete installation guide
-└── README.md                    # Project overview
+├── src/                         # Source code
+│   ├── index.ts                 # 🚀 Main entry point (IIFE startup pattern)
+│   ├── server.ts                # 🏭 MCP server factory (OpenZeppelin-style)
+│   ├── tools/                   # 🛠️ Tool system (modular architecture)
+│   │   ├── toolRegistry.ts      #   ├─ Registration & request handling
+│   │   ├── toolDefinitions.ts   #   ├─ Schema definitions & metadata
+│   │   └── genLayerTools.ts     #   └─ Business logic implementations
+│   ├── utils/                   # 🔧 Utilities
+│   │   └── contractGenerator.ts #   └─ GenLayer contract generation engine
+│   └── config/                  # ⚙️ Configuration
+│       └── tools.ts             #   └─ Constants & type mappings
+├── tests/                       # 🧪 Test suite
+│   ├── tools.test.ts            #   ├─ Tool unit tests
+│   ├── contractGenerator.test.ts #   ├─ Generator unit tests
+│   ├── integration.test.ts      #   ├─ End-to-end integration tests
+│   └── setup.ts                 #   └─ Test configuration & mocks
+├── .github/                     # 🤖 Repository governance
+│   ├── workflows/               #   ├─ CI/CD automation
+│   ├── ISSUE_TEMPLATE/          #   ├─ Issue templates
+│   ├── CODEOWNERS               #   ├─ Code review assignments
+│   └── dependabot.yml           #   └─ Automated dependency updates
+├── dist/                        # 📦 Compiled JavaScript output
+├── coverage/                    # 📊 Test coverage reports
+└── README.md                    # 📖 Project documentation
+```
+
+### Architecture Patterns
+
+#### 🏭 **Factory Pattern (OpenZeppelin-inspired)**
+```typescript
+// src/server.ts - Server factory
+export function createServer(): Server {
+  const server = new Server({
+    name: "genlayer-mcp-server",
+    version,
+  }, {
+    capabilities: { tools: {} }
+  });
+  
+  registerGenLayerTools(server);
+  return server;
+}
+```
+
+#### 🚀 **IIFE Startup Pattern**
+```typescript
+// src/index.ts - Auto-starting server
+const transport = new StdioServerTransport();
+(async () => {
+  const server = createServer();
+  await server.connect(transport);
+})();
+```
+
+#### 🛠️ **Modular Tool System**
+```typescript
+// Separation of concerns across three layers:
+// 1. toolDefinitions.ts  → Schema & metadata
+// 2. toolRegistry.ts     → MCP protocol integration  
+// 3. genLayerTools.ts    → Business logic
 ```
 
 ### Key Components
 
-- **Main Server** (`index.ts`): Entry point providing stdio MCP communication for npx deployment
-- **Server Factory** (`server.ts`): Creates and configures MCP server instances following modular patterns
-- **Tool System**: Modular tool registration with separated definitions and implementations
-- **Stdio Transport**: Uses MCP SDK stdio transport for seamless integration with AI clients
+#### 🎯 **Core Server Architecture**
+- **Entry Point** (`index.ts`): Stdio-based MCP server with IIFE auto-startup for NPX deployment
+- **Server Factory** (`server.ts`): Configurable server creation following OpenZeppelin patterns
+- **Transport Layer**: MCP SDK stdio transport enabling seamless AI client integration
+
+#### 🛠️ **Tool System Architecture** 
+- **Tool Definitions** (`toolDefinitions.ts`): Centralized schema definitions with Zod validation
+- **Tool Registry** (`toolRegistry.ts`): MCP protocol handlers and request routing
+- **Tool Implementations** (`genLayerTools.ts`): High-level business logic with error handling
+
+#### ⚙️ **Generation Engine**
+- **Contract Generator** (`contractGenerator.ts`): Core GenLayer syntax and template engine
+- **Configuration** (`tools.ts`): Type mappings, templates, and generation constants
+- **Template System**: Pre-built patterns (DAO, oracles, prediction markets, vector stores)
+
+#### 🧪 **Testing Architecture**
+- **Unit Tests**: Individual component validation with comprehensive mocking
+- **Integration Tests**: Full MCP server workflow testing with real protocol communication  
+- **Coverage**: Multi-Node.js version testing (18.x, 20.x, 22.x) via GitHub Actions
+
+#### 🤖 **DevOps & Governance**
+- **Branch Protection**: Required PR reviews, CI checks, code owner approval
+- **Automated Testing**: Multi-environment validation with coverage reporting
+- **Dependency Management**: Weekly Dependabot updates with security monitoring
+- **NPM Publishing**: Automated releases triggered by GitHub releases
 
 ## 📚 Available Tools
 

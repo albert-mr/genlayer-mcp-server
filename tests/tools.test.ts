@@ -121,7 +121,8 @@ describe('GenLayerTools', () => {
       const params = {
         market_name: 'invalid_market',
         description: 'Test market',
-        resolution_criteria: 'Some criteria for resolution testing'
+        resolution_criteria: 'Some criteria for resolution testing',
+        web_sources: ['https://api.example.com']
       };
 
       const result = await GenLayerTools.createPredictionMarket(params);
@@ -135,7 +136,8 @@ describe('GenLayerTools', () => {
       const params = {
         market_name: 'TestMarket',
         description: 'Test market',
-        resolution_criteria: 'Short'
+        resolution_criteria: 'Short',
+        web_sources: ['https://api.example.com']
       };
 
       const result = await GenLayerTools.createPredictionMarket(params);
@@ -148,7 +150,8 @@ describe('GenLayerTools', () => {
       const params = {
         market_name: 'DefaultSourceMarket',
         description: 'Market with default sources',
-        resolution_criteria: 'Will resolve based on default data sources'
+        resolution_criteria: 'Will resolve based on default data sources',
+        web_sources: ['https://api.coindesk.com/v1/bpi/currentprice.json']
       };
 
       const result = await GenLayerTools.createPredictionMarket(params);
