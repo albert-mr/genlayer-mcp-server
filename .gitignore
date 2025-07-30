@@ -40,3 +40,8 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+
+# NPM package files
+*.tgz
+
+CLAUDE.md

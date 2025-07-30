@@ -1,5 +1,5 @@
 {
-  "name": "genlayer-mcp-server",
+  "name": "@genlayer/mcp-server",
   "version": "1.0.0",
   "description": "MCP server for generating GenLayer Intelligent Contracts with AI-native blockchain capabilities",
   "type": "module",
@@ -7,8 +7,14 @@
   "bin": {
     "genlayer-mcp-server": "dist/index.js"
   },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepublishOnly": "npm run build",
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "test": "jest",
@@ -16,14 +22,13 @@
     "test:coverage": "jest --coverage",
     "test:integration": "npm run build && jest tests/integration.test.ts",
     "test:unit": "jest --testPathIgnorePatterns=integration",
-    "test:server": "npm run build && node dist/index.js",
     "clean": "rm -rf dist coverage",
     "lint": "tsc --noEmit",
     "validate": "npm run lint && npm run test:unit"
   },
   "keywords": [
     "mcp",
-    "model-context-protocol", 
+    "model-context-protocol",
     "genlayer",
     "intelligent-contracts",
     "blockchain",
@@ -37,8 +42,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
     "@types/jest": "^29.5.5",
+    "@types/node": "^18.0.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.0"
@@ -53,5 +58,8 @@
   "homepage": "https://github.com/albert-mr/genlayer-mcp-server",
   "bugs": {
     "url": "https://github.com/albert-mr/genlayer-mcp-server/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

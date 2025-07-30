@@ -1,7 +1,6 @@
 // GenLayer MCP Tools Implementation
 
 import { GenLayerContractGenerator } from "../utils/contractGenerator.js";
-import { TOOLS_CONFIG } from "../config/tools.js";
 
 export interface ToolResult {
   content: string;
@@ -510,9 +509,9 @@ def process_text(self, user_input: str) -> str:
 def analyze_with_json(self, content: str) -> dict:
     def get_analysis() -> str:
         prompt = f"""Analyze: {content}
-        Return JSON: {{"sentiment": "positive/negative/neutral", "confidence": 0.0-1.0}}"""
+        Return JSON: {{"sentiment": "positive/negative/neutral", "confidence": "0.0-1.0"}}"""
         result = gl.exec_prompt(prompt)
-        return result.replace("```json", "").replace("```", "").strip()
+        return result.replace("\`\`\`json", "").replace("\`\`\`", "").strip()
     
     json_result = gl.eq_principle_strict_eq(get_analysis)
     return json.loads(json_result)
@@ -628,12 +627,12 @@ class IntelligentNewsAnalyzer(gl.Contract):
                 "sentiment": "positive/negative/neutral",
                 "key_topics": ["topic1", "topic2"],
                 "summary": "brief summary",
-                "credibility_score": 0.0-1.0,
+                "credibility_score": "0.0-1.0",
                 "bias_detection": "left/right/center/unknown"
             }}"""
             
             result = gl.exec_prompt(prompt)
-            return result.replace("```json", "").replace("```", "").strip()
+            return result.replace("\`\`\`json", "").replace("\`\`\`", "").strip()
         
         # Use equivalence principle for consistent analysis
         analysis_result = gl.eq_principle_strict_eq(comprehensive_analysis)

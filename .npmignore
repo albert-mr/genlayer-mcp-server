@@ -1,0 +1,34 @@
+# Source files (only dist should be published)
+src/
+tests/
+tsconfig.json
+jest.config.js
+
+# HTTP server not needed for npx usage
+dist/httpServer.js
+dist/httpServer.d.ts
+dist/httpServer.js.map
+dist/httpServer.d.ts.map
+
+# Development files
+.vscode/
+.DS_Store
+*.log
+node_modules/
+
+# Test and coverage
+coverage/
+*.test.js
+*.test.ts
+
+# Development config
+.env
+.env.local
+.env.*.local
+
+# Git
+.git/
+.gitignore
+
+# Build artifacts that shouldn't be published
+*.tsbuildinfo

@@ -6,9 +6,26 @@
 
 A comprehensive MCP (Model Context Protocol) server for generating sophisticated GenLayer Intelligent Contracts with AI-native blockchain capabilities.
 
+## 📑 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features) 
+- [Quick Start](#-quick-start)
+- [Installation Guide](#-installation-guide)
+  - [NPX Method (Recommended)](#npx-method-recommended)
+  - [IDE Integrations](#ide-integrations)
+  - [Self-Hosting Options](#self-hosting-options)
+- [Available Tools](#-available-tools)
+- [Testing](#-testing)
+- [Architecture](#%EF%B8%8F-architecture)
+- [Development](#-development)
+- [GenLayer Resources](#-genlayer-resources)
+- [Contributing](#-contributing)
+- [Support](#-support)
+
 ## ⚠️ Disclaimer
 
-**This project was created as an experimental proof-of-concept to test the capabilities of combining [Goose](https://github.com/block/goose) + [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) and [Claude Code](https://github.com/anthropics/claude-code).** This has been vibecoded, so be aware of that. Errors or inconsistencies may occur. Use in production environments is not recommended without thorough testing and validation.
+**This project was created as an experimental proof-of-concept to test the capabilities of combining [Goose](https://github.com/block/goose) + [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) and [Claude Code](https://github.com/anthropics/claude-code).** This has been vibecoded, so be aware of that. Errors or inconsistencies may occur.
 
 ## 🌟 Overview
 
@@ -46,187 +63,241 @@ This MCP server provides powerful tools for generating various types of GenLayer
 - **🔍 Type Safety**: Full TypeScript implementation with proper type annotations
 - **⚡ Performance Optimized**: Efficient contract generation with caching and optimization
 
-## 🏁 Quick Start
+## 🚀 Quick Start
 
-### Prerequisites
+The easiest way to get started is with **NPX** - zero installation required!
 
-- **Node.js** 18.0.0 or higher
-- **npm** or **yarn** package manager
+### 1. Add to Your AI Client
 
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/albert-mr/genlayer-mcp-server.git
-cd genlayer-mcp-server
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Run tests to verify installation
-npm test
-```
-
-### Usage with Claude Desktop
-
-Add this configuration to your Claude Desktop settings:
-
+**Claude Desktop:**
 ```json
 {
-  \"mcpServers\": {
-    \"genlayer\": {
-      \"command\": \"node\",
-      \"args\": [\"/path/to/genlayer-mcp-server/dist/index.js\"]
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
     }
   }
 }
 ```
 
-### Standalone Usage
+**Cursor:**
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx", 
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+### 2. Start Using GenLayer Tools
+
+Ask your AI client:
+```
+"Generate a GenLayer intelligent contract called 'HelloWorld' that stores a greeting message"
+```
+
+That's it! The server downloads and runs automatically. 🎉
+
+---
+
+## 📋 Installation Guide
+
+### NPX Method (Recommended)
+
+**No installation required!** Just add the NPX configuration to your MCP client and it works automatically.
 
 ```bash
-# Start the MCP server
+# The server runs automatically when referenced by MCP clients
+# No manual startup needed!
+```
+
+**Supported Clients:**
+- ✅ Claude Desktop
+- ✅ Claude Code
+- ✅ Cursor
+- ✅ Windsurf  
+- ✅ VS Code (with MCP extension)
+- ✅ Gemini CLI
+
+### IDE Integrations
+
+<details>
+<summary><strong>🎯 Claude Desktop</strong></summary>
+
+#### Installation Steps:
+1. Open **Settings** → **Developer** → **Edit Config**
+2. Add this configuration:
+
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+#### Alternative (Manual):
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "node",
+      "args": ["/absolute/path/to/genlayer-mcp-server/dist/index.js"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>🚀 Claude Code</strong></summary>
+
+```bash
+# Add with NPX (recommended)
+claude mcp add -t stdio genlayer "npx -y @genlayer/mcp-server@latest"
+
+# Verify installation
+claude mcp list
+claude mcp test genlayer
+```
+
+</details>
+
+<details>
+<summary><strong>🎨 Cursor</strong></summary>
+
+1. Open **Settings** (Cmd+Shift+J) → **Tools & Integrations** → **New MCP Server**
+2. Add configuration:
+
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>💻 Visual Studio Code</strong></summary>
+
+1. Install **MCP for VS Code** extension
+2. Open Command Palette → **MCP: Add Server**
+3. Use this configuration:
+
+```json
+{
+  "servers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>🌊 Windsurf</strong></summary>
+
+1. Open **Settings** (Cmd+,) → **MCP Servers** → **Manage MCP servers** → **View raw config**
+2. Add configuration:
+
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>💎 Gemini CLI</strong></summary>
+
+1. Install Gemini CLI: `npm install -g @google-ai/gemini-cli`
+2. Edit `~/.gemini/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": ["-y", "@genlayer/mcp-server@latest"]
+    }
+  }
+}
+```
+
+</details>
+
+### Self-Hosting Options
+
+#### Local Development
+
+**Prerequisites:**
+- Node.js 18.0.0+
+- npm or yarn
+
+```bash
+# Clone and install
+git clone https://github.com/albert-mr/genlayer-mcp-server.git
+cd genlayer-mcp-server
+npm install
+npm run build
+
+# Test the server
 npm start
-
-# Or run in development mode with auto-reload
-npm run dev
 ```
 
-## 📖 Usage Examples
+#### Docker Deployment
 
-### 1. Generate a Basic Intelligent Contract
-
-```typescript
-// Request to Claude with GenLayer MCP
-\"Generate an intelligent contract called 'UserRegistry' that stores user profiles with name, email, and registration date. Include LLM capabilities for profile validation.\"
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY dist/ ./dist/
+CMD ["node", "dist/index.js"]
 ```
 
-**Generated Output:**
-
-```python
-# { \"Depends\": \"py-genlayer:test\" }
-from genlayer import *
-import typing
-import json
-import re
-
-class UserRegistry(gl.Contract):
-    \"\"\"Intelligent Contract UserRegistry running on GenLayer\"\"\"
-
-    # Storage fields
-    name: str # User name
-    email: str # User email
-    registration_date: str # Registration date
-
-    def __init__(self, name: str = \"\", email: str = \"\", registration_date: str = \"\"):
-        self.name = name
-        self.email = email
-        self.registration_date = registration_date
-
-    @gl.public.view
-    def get_info(self) -> str:
-        return \"Intelligent Contract UserRegistry running on GenLayer\"
-
-    @gl.public.write
-    def validate_profile(self, profile_data: str) -> str:
-        \"\"\"Validate user profile using AI\"\"\"
-        def llm_validation() -> str:
-            task = f\"\"\"Validate this user profile data: {profile_data}
-
-            Check for:
-            1. Valid email format
-            2. Reasonable name length
-            3. Proper data formatting
-
-            Return JSON: {{\"valid\": true/false, \"issues\": [\"list of issues\"]}}\"\"\"
-
-            result = gl.exec_prompt(task)
-            return result.strip()
-
-        validation_result = gl.eq_principle_strict_eq(llm_validation)
-        return validation_result
+```bash
+# Build and run
+docker build -t genlayer-mcp-server .
+docker run genlayer-mcp-server
 ```
 
-### 2. Create a Prediction Market
+#### Custom NPM Package
 
-```typescript
-// Request example
-\"Create a prediction market for Bitcoin price reaching $100,000 by end of 2024\"
-```
+To publish your own version:
 
-**Generated Output:**
+```bash
+# Build and test
+npm run build
+npm test
 
-- Complete prediction market contract with AI-powered resolution
-- Multi-source data verification (CoinDesk, CoinGecko APIs)
-- Sophisticated betting mechanisms with confidence levels
-- Proportional payout system
-- User position tracking and betting history
+# Publish to npm  
+npm publish
 
-### 3. Generate Advanced Templates
-
-#### DAO Governance Contract
-
-```python
-class GovernanceDAO(gl.Contract):
-    \"\"\"Intelligent DAO with AI-powered proposal analysis\"\"\"
-
-    @gl.public.write
-    def create_proposal(self, title: str, description: str) -> typing.Any:
-        # AI analyzes proposal for validity and impact
-        def analyze_proposal() -> str:
-            task = f\"\"\"Analyze DAO proposal:
-            Title: {title}
-            Description: {description}
-
-            Return: {{\"validity\": true/false, \"impact\": \"low/medium/high\"}}\"\"\"
-            return gl.exec_prompt(task)
-
-        analysis = gl.eq_principle_strict_eq(analyze_proposal)
-        # Store proposal with AI analysis...
-```
-
-#### Content Moderation System
-
-```python
-class ContentModerator(gl.Contract):
-    \"\"\"AI-powered content moderation\"\"\"
-
-    @gl.public.write
-    def moderate_content(self, content: str) -> typing.Any:
-        # Non-comparative equivalence for subjective decisions
-        result = gl.eq_principle_prompt_non_comparative(
-            lambda: gl.exec_prompt(f\"Moderate: {content}\"),
-            task=\"Apply community guidelines\",
-            criteria=\"Fair, unbiased, consistent moderation\"
-        )
-        return result
-```
-
-### 4. Vector Store for Semantic Search
-
-```python
-class DocumentStore(gl.Contract):
-    \"\"\"Semantic document search with vector embeddings\"\"\"
-    vector_store: VecDB[np.float32, typing.Literal[384], DocumentEntry]
-
-    def get_embedding(self, text: str) -> np.ndarray:
-        return genlayermodelwrappers.SentenceTransformer(\"all-MiniLM-L6-v2\")(text)
-
-    @gl.public.write
-    def add_document(self, text: str, metadata: dict) -> u256:
-        embedding = self.get_embedding(text)
-        entry = DocumentEntry(text=text, metadata=metadata)
-        self.vector_store.insert(embedding, entry)
-        return entry_id
-
-    @gl.public.view
-    def search_similar(self, query: str, top_k: int = 5) -> DynArray[dict]:
-        query_embedding = self.get_embedding(query)
-        results = list(self.vector_store.knn(query_embedding, top_k))
-        # Return formatted results...
+# Users can then use:
+# npx -y @your-org/mcp-server@latest
 ```
 
 ## 🧪 Testing
@@ -265,8 +336,11 @@ npm run test:server
 ```
 genlayer-mcp-server/
 ├── src/
-│   ├── index.ts                 # Main MCP server implementation
+│   ├── index.ts                 # Main MCP server entry point (stdio)
+│   ├── server.ts                # MCP server factory
 │   ├── tools/
+│   │   ├── toolRegistry.ts      # Tool registration and handling
+│   │   ├── toolDefinitions.ts   # Tool schema definitions
 │   │   └── genLayerTools.ts     # GenLayer-specific tool implementations
 │   ├── utils/
 │   │   └── contractGenerator.ts # Contract generation utilities
@@ -278,8 +352,17 @@ genlayer-mcp-server/
 │   ├── integration.test.ts      # Integration tests
 │   └── setup.ts                 # Test configuration
 ├── dist/                        # Compiled JavaScript output
-└── coverage/                    # Test coverage reports
+├── coverage/                    # Test coverage reports
+├── INSTALL.md                   # Complete installation guide
+└── README.md                    # Project overview
 ```
+
+### Key Components
+
+- **Main Server** (`index.ts`): Entry point providing stdio MCP communication for npx deployment
+- **Server Factory** (`server.ts`): Creates and configures MCP server instances following modular patterns
+- **Tool System**: Modular tool registration with separated definitions and implementations
+- **Stdio Transport**: Uses MCP SDK stdio transport for seamless integration with AI clients
 
 ## 📚 Available Tools
 
@@ -403,6 +486,73 @@ const result = await client.callTool("generate_intelligent_contract", {
 - 🎯 [Use Case Ideas](https://docs.genlayer.com/developers/intelligent-contracts/ideas) - Inspiration for your projects
 - 🏗️ [Project Boilerplate](https://docs.genlayer.com/developers/decentralized-applications/project-boilerplate) - Starter templates
 
+## 🛠️ Development
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/albert-mr/genlayer-mcp-server.git
+cd genlayer-mcp-server
+
+# Install dependencies
+npm install
+
+# Run in development mode with auto-reload
+npm run dev
+
+# Run tests during development
+npm run test:watch
+
+# Type checking
+npm run lint
+
+# Full validation
+npm run validate
+```
+
+### Project Structure
+
+```
+src/
+├── index.ts                 # Main MCP server entry point
+├── server.ts                # MCP server factory
+├── tools/
+│   ├── toolRegistry.ts      # Tool registration and handling
+│   ├── toolDefinitions.ts   # Tool schema definitions
+│   └── genLayerTools.ts     # Tool implementations
+├── utils/
+│   └── contractGenerator.ts # Contract generation utilities
+└── config/
+    └── tools.ts             # Configuration constants
+```
+
+### Testing Strategy
+
+- **Unit Tests**: Individual tool and utility function testing
+- **Integration Tests**: Full MCP server functionality testing
+- **End-to-End Tests**: Complete contract generation workflows
+
+### Configuration
+
+#### Environment Variables
+
+```bash
+# Set debug mode
+export DEBUG=mcp:*
+
+# GenLayer network configuration
+export GENLAYER_NETWORK=testnet
+```
+
+#### Custom Tool Configuration
+
+Edit `src/config/tools.ts` to customize:
+- Default contract templates
+- GenLayer type mappings
+- Tool descriptions and schemas
+- Validation rules
+
 ## 🤝 Contributing
 
 We welcome contributions! Here's how to get started:
@@ -414,25 +564,6 @@ We welcome contributions! Here's how to get started:
 5. **Commit your changes**: `git commit -m 'Add amazing feature'`
 6. **Push to the branch**: `git push origin feature/amazing-feature`
 7. **Open a Pull Request**
-
-### Development Workflow
-
-```bash
-# Install dependencies
-npm install
-
-# Run in development mode with auto-reload
-npm run dev
-
-# Run tests during development
-npm run test:watch
-
-# Check code quality
-npm run lint
-
-# Run full validation before committing
-npm run validate
-```
 
 ### Code Quality Standards
 
@@ -454,8 +585,48 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
+### Getting Help
+
+1. **Check the logs** - Most issues are revealed in server logs
+2. **Test connectivity** - Use the provided test commands:
+   ```bash
+   # Basic functionality test
+   npm run test:unit
+   
+   # Test server startup  
+   npm start
+   ```
+3. **Try the examples** - Ask your AI client:
+   ```
+   "List the available tools from the GenLayer MCP server"
+   "Generate a simple GenLayer contract called 'Test'"
+   ```
+
+### Troubleshooting
+
+#### Issue: "Command not found" or "Module not found"
+**Solution:**
+- Ensure Node.js 18.0.0+ is installed
+- Verify absolute paths in manual configurations
+- Check that build was successful: `npm run build`
+
+#### Issue: "Server not found" (NPX mode)
+**Solution:**
+- Ensure internet connection for npm package download
+- Clear npm cache: `npm cache clean --force`
+- Verify package name: `@genlayer/mcp-server`
+
+#### Issue: "Tools not available"
+**Solution:**
+- Restart your IDE/client after configuration changes
+- Verify MCP server configuration syntax
+- Check server logs for errors
+
+### Community & Support
+
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/albert-mr/genlayer-mcp-server/issues)
 - 💬 **Community Support**: [Discord](https://discord.gg/8Jm4v89VAu)
+- 📱 **Real-time Chat**: [Telegram](https://t.me/genlayer)
 
 ---
 
