@@ -15,7 +15,6 @@ A comprehensive MCP (Model Context Protocol) server for generating sophisticated
   - [NPX Method (Recommended)](#npx-method-recommended)
   - [IDE Integrations](#ide-integrations)
   - [Self-Hosting Options](#self-hosting-options)
-- [Available Tools](#-available-tools)
 - [Testing](#-testing)
 - [Architecture](#%EF%B8%8F-architecture)
 - [Development](#-development)
@@ -75,7 +74,7 @@ The easiest way to get started is with **NPX** - zero installation required!
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -87,7 +86,7 @@ The easiest way to get started is with **NPX** - zero installation required!
   "mcpServers": {
     "genlayer": {
       "command": "npx", 
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -137,7 +136,7 @@ That's it! The server downloads and runs automatically. 🎉
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -162,7 +161,7 @@ That's it! The server downloads and runs automatically. 🎉
 
 ```bash
 # Add with NPX (recommended)
-claude mcp add -t stdio genlayer "npx -y @genlayer/mcp-server@latest"
+claude mcp add -t stdio genlayer "npx -y @albert-mr/genlayer-mcp-server@latest"
 
 # Verify installation
 claude mcp list
@@ -182,7 +181,7 @@ claude mcp test genlayer
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -202,7 +201,7 @@ claude mcp test genlayer
   "servers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -221,7 +220,7 @@ claude mcp test genlayer
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -240,7 +239,7 @@ claude mcp test genlayer
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": ["-y", "@genlayer/mcp-server@latest"]
+      "args": ["-y", "@albert-mr/genlayer-mcp-server@latest"]
     }
   }
 }
@@ -297,7 +296,7 @@ npm test
 npm publish
 
 # Users can then use:
-# npx -y @your-org/mcp-server@latest
+# npx -y @albert-mr/genlayer-mcp-server@latest
 ```
 
 ## 🧪 Testing
@@ -427,76 +426,6 @@ const transport = new StdioServerTransport();
 - **Dependency Management**: Weekly Dependabot updates with security monitoring
 - **NPM Publishing**: Automated releases triggered by GitHub releases
 
-## 📚 Available Tools
-
-### 1. `generate_intelligent_contract`
-
-Generate comprehensive GenLayer Intelligent Contracts with customizable features.
-
-**Parameters:**
-
-- `contract_name` (string): Contract class name (PascalCase)
-- `requirements` (string): Detailed contract requirements
-- `use_llm` (boolean): Include LLM interaction capabilities
-- `web_access` (boolean): Include web data access
-- `storage_fields` (array): Contract storage fields with types
-- `template_type` (enum): Use predefined templates
-
-**Example Usage:**
-
-```json
-{
-  \"contract_name\": \"SmartOracle\",
-  \"requirements\": \"An oracle that fetches and validates data from multiple sources\",
-  \"use_llm\": true,
-  \"web_access\": true,
-  \"storage_fields\": [
-    {\"name\": \"data_sources\", \"type\": \"list\", \"description\": \"List of data source URLs\"},
-    {\"name\": \"last_update\", \"type\": \"integer\", \"description\": \"Timestamp of last update\"}
-  ]
-}
-```
-
-### 2. `create_prediction_market`
-
-Generate sophisticated prediction markets with AI-powered resolution.
-
-**Parameters:**
-
-- `market_name` (string): Market contract name (must end with 'Market')
-- `description` (string): What the market predicts
-- `resolution_criteria` (string): Specific resolution criteria
-- `web_sources` (array): Data source URLs for resolution
-- `resolution_deadline` (string): When market resolves
-- `category` (enum): Market category
-
-### 3. `generate_contract_template`
-
-Generate contracts from predefined templates for common use cases.
-
-**Available Templates:**
-
-- `dao_governance`: DAO governance with AI proposal analysis
-- `content_moderation`: AI-powered content filtering
-- `sentiment_tracker`: Sentiment analysis and tracking
-- `multi_oracle`: Multi-source data oracle with consensus
-
-### 4. `explain_genlayer_concepts`
-
-Get detailed explanations of GenLayer concepts with code examples.
-
-**Available Concepts:**
-
-- `equivalence_principle`: Consensus for non-deterministic operations
-- `optimistic_democracy`: GenLayer's consensus mechanism
-- `llm_integration`: AI integration in smart contracts
-- `web_data_access`: Native web connectivity
-- `vector_stores`: Semantic search capabilities
-- `intelligent_contracts`: Overview of intelligent contracts
-- `genvm`: GenLayer virtual machine
-- `genlayer_types`: Data types and storage
-- `best_practices`: Security and development guidelines
-
 ## 🔗 Integration Examples
 
 ### With Claude Desktop
@@ -583,18 +512,18 @@ src/
 ├── tools/
 │   ├── toolRegistry.ts      # Tool registration and handling
 │   ├── toolDefinitions.ts   # Tool schema definitions
-│   └── genLayerTools.ts     # Tool implementations
+│   ├── genLayerTools.ts     # Main tool interface (delegates to modules)
+│   └── modules/             # Modular tool implementations
+│       ├── contractGeneration.ts      # Core contract generation tools
+│       ├── typesAndStorage.ts         # Types and storage explanations
+│       ├── deploymentAndDebugging.ts  # Deployment and debugging tools
+│       ├── interactionAndIntegration.ts # GenLayerJS and interaction tools
+│       └── conceptsExplanation.ts     # GenLayer concepts explanations
 ├── utils/
 │   └── contractGenerator.ts # Contract generation utilities
 └── config/
     └── tools.ts             # Configuration constants
 ```
-
-### Testing Strategy
-
-- **Unit Tests**: Individual tool and utility function testing
-- **Integration Tests**: Full MCP server functionality testing
-- **End-to-End Tests**: Complete contract generation workflows
 
 ### Configuration
 
@@ -677,7 +606,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Solution:**
 - Ensure internet connection for npm package download
 - Clear npm cache: `npm cache clean --force`
-- Verify package name: `@genlayer/mcp-server`
+- Verify package name: `@albert-mr/genlayer-mcp-server`
 
 #### Issue: "Tools not available"
 **Solution:**

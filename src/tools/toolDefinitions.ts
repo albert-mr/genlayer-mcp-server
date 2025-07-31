@@ -273,5 +273,406 @@ export const toolDefinitions: Tool[] = [
       },
       required: ["concept"]
     }
+  },
+  {
+    name: "explain_genlayer_types",
+    description: "Get comprehensive explanations and examples of GenLayer's type system including primitive types, collection types, storage restrictions, and best practices",
+    inputSchema: {
+      type: "object",
+      properties: {
+        type_category: {
+          type: "string",
+          description: "Category of types to explain",
+          enum: [
+            "primitive_types",
+            "collection_types", 
+            "custom_types",
+            "calldata_types",
+            "storage_restrictions",
+            "type_conversions",
+            "all_types"
+          ]
+        },
+        include_examples: {
+          type: "boolean",
+          description: "Include code examples for each type",
+          default: true
+        },
+        include_comparisons: {
+          type: "boolean", 
+          description: "Include comparisons with standard Python types",
+          default: true
+        }
+      },
+      required: ["type_category"]
+    }
+  },
+  {
+    name: "explain_storage_patterns",
+    description: "Explain GenLayer storage patterns, persistent data handling, TreeMap/DynArray usage, and storage optimization techniques",
+    inputSchema: {
+      type: "object",
+      properties: {
+        storage_topic: {
+          type: "string",
+          description: "Storage topic to explain in detail",
+          enum: [
+            "storage_basics",
+            "dynarray_usage",
+            "treemap_usage",
+            "custom_storage_types",
+            "storage_optimization",
+            "storage_patterns",
+            "storage_best_practices"
+          ]
+        },
+        include_examples: {
+          type: "boolean",
+          description: "Include practical code examples",
+          default: true
+        },
+        complexity_level: {
+          type: "string",
+          description: "Complexity level of examples and explanations",
+          enum: ["beginner", "intermediate", "advanced"],
+          default: "intermediate"
+        }
+      },
+      required: ["storage_topic"]
+    }
+  },
+  {
+    name: "generate_deployment_script",
+    description: "Generate deployment scripts for GenLayer contracts supporting different networks (localnet, studionet, testnet) with configuration options",
+    inputSchema: {
+      type: "object",
+      properties: {
+        script_type: {
+          type: "string",
+          description: "Type of deployment script to generate",
+          enum: ["typescript", "python", "cli_command", "deploy_config"]
+        },
+        network_target: {
+          type: "string",
+          description: "Target network for deployment",
+          enum: ["localnet", "studionet", "testnet_asimov", "all_networks"],
+          default: "localnet"
+        },
+        contract_path: {
+          type: "string",
+          description: "Path to the contract file",
+          default: "contracts/my_contract.py"
+        },
+        constructor_args: {
+          type: "array",
+          description: "Constructor arguments for contract deployment",
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              type: { type: "string" },
+              value: { type: "string" },
+              description: { type: "string" }
+            },
+            required: ["name", "type", "value"]
+          },
+          default: []
+        },
+        deployment_options: {
+          type: "object",
+          description: "Additional deployment configuration",
+          properties: {
+            gas_limit: {
+              type: "number",
+              description: "Gas limit for deployment",
+              default: 1000000
+            },
+            wait_for_confirmation: {
+              type: "boolean",
+              description: "Wait for transaction confirmation",
+              default: true
+            },
+            verify_deployment: {
+              type: "boolean",
+              description: "Verify contract deployment",
+              default: true
+            }
+          },
+          default: {}
+        }
+      },
+      required: ["script_type", "contract_path"]
+    }
+  },
+  {
+    name: "generate_debugging_guide",
+    description: "Generate debugging strategies and tools for GenLayer contracts including logging, error handling, and testing approaches",
+    inputSchema: {
+      type: "object", 
+      properties: {
+        debug_topic: {
+          type: "string",
+          description: "Debugging topic to focus on",
+          enum: [
+            "contract_debugging",
+            "transaction_debugging",
+            "consensus_debugging", 
+            "llm_debugging",
+            "web_access_debugging",
+            "studio_debugging",
+            "cli_debugging",
+            "testing_strategies"
+          ]
+        },
+        include_code_examples: {
+          type: "boolean",
+          description: "Include debugging code examples",
+          default: true
+        },
+        include_troubleshooting: {
+          type: "boolean",
+          description: "Include common issues and solutions",
+          default: true
+        }
+      },
+      required: ["debug_topic"]
+    }
+  },
+  {
+    name: "generate_genlayerjs_integration",
+    description: "Generate GenLayerJS integration code for frontend applications including contract interaction, transaction handling, and event monitoring",
+    inputSchema: {
+      type: "object",
+      properties: {
+        integration_type: {
+          type: "string", 
+          description: "Type of GenLayerJS integration to generate",
+          enum: [
+            "basic_setup",
+            "contract_interaction",
+            "transaction_monitoring",
+            "account_management",
+            "event_subscription",
+            "error_handling",
+            "complete_example"
+          ]
+        },
+        framework: {
+          type: "string",
+          description: "Frontend framework to target",
+          enum: ["react", "vue", "angular", "vanilla", "nextjs"],
+          default: "react"
+        },
+        contract_methods: {
+          type: "array",
+          description: "Contract methods to interact with",
+          items: {
+            type: "object",
+            properties: {
+              name: { type: "string", description: "Method name" },
+              type: { 
+                type: "string", 
+                enum: ["view", "write"],
+                description: "Method type (view for read-only, write for state-changing)"
+              },
+              parameters: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    name: { type: "string" },
+                    type: { type: "string" }
+                  },
+                  required: ["name", "type"]
+                },
+                default: []
+              },
+              returns: { type: "string", description: "Return type" }
+            },
+            required: ["name", "type"]
+          },
+          default: []
+        },
+        network_config: {
+          type: "object",
+          description: "Network configuration settings",
+          properties: {
+            rpc_url: { type: "string", default: "http://localhost:4000" },
+            chain_id: { type: "number", default: 1337 },
+            network_name: { type: "string", default: "localnet" }
+          },
+          default: {}
+        }
+      },
+      required: ["integration_type"]
+    }
+  },
+  {
+    name: "generate_contract_interaction_examples",
+    description: "Generate examples for reading from and writing to GenLayer contracts using various methods (CLI, GenLayerJS, Python SDK)",
+    inputSchema: {
+      type: "object",
+      properties: {
+        interaction_method: {
+          type: "string",
+          description: "Method for interacting with contracts",
+          enum: [
+            "genlayerjs_read",
+            "genlayerjs_write", 
+            "python_sdk_read",
+            "python_sdk_write",
+            "cli_interaction",
+            "all_methods"
+          ]
+        },
+        contract_type: {
+          type: "string",
+          description: "Type of contract to interact with",
+          enum: [
+            "simple_storage",
+            "prediction_market",
+            "dao_governance",
+            "vector_store",
+            "llm_contract",
+            "custom_contract"
+          ],
+          default: "simple_storage"
+        },
+        example_operations: {
+          type: "array",
+          description: "Specific operations to demonstrate",
+          items: {
+            type: "string",
+            enum: [
+              "read_state",
+              "write_state", 
+              "call_llm_method",
+              "handle_events",
+              "batch_operations",
+              "error_handling",
+              "gas_optimization"
+            ]
+          },
+          default: ["read_state", "write_state"]
+        },
+        include_error_handling: {
+          type: "boolean",
+          description: "Include comprehensive error handling examples",
+          default: true
+        }
+      },
+      required: ["interaction_method"]
+    }
+  },
+  {
+    name: "generate_testing_framework",
+    description: "Generate comprehensive testing setups for GenLayer contracts including unit tests, integration tests, and end-to-end testing strategies",
+    inputSchema: {
+      type: "object",
+      properties: {
+        test_framework: {
+          type: "string",
+          description: "Testing framework to use",
+          enum: ["pytest", "jest", "hardhat_style", "custom"],
+          default: "pytest"
+        },
+        test_types: {
+          type: "array", 
+          description: "Types of tests to generate",
+          items: {
+            type: "string",
+            enum: [
+              "unit_tests",
+              "integration_tests",
+              "consensus_tests",
+              "llm_behavior_tests",
+              "web_access_tests",
+              "performance_tests",
+              "security_tests"
+            ]
+          },
+          default: ["unit_tests", "integration_tests"]
+        },
+        contract_features: {
+          type: "array",
+          description: "Contract features to test",
+          items: {
+            type: "string",
+            enum: [
+              "basic_operations",
+              "llm_integration", 
+              "web_data_access",
+              "consensus_mechanisms",
+              "storage_operations",
+              "event_emission",
+              "access_control"
+            ]
+          },
+          default: ["basic_operations"]
+        },
+        mock_external_services: {
+          type: "boolean",
+          description: "Include mocking for external services (LLMs, web APIs)",
+          default: true
+        }
+      },
+      required: ["test_framework"]
+    }
+  },
+  {
+    name: "generate_project_boilerplate",
+    description: "Generate a complete GenLayer project structure with contracts, tests, deployment scripts, and frontend integration",
+    inputSchema: {
+      type: "object",
+      properties: {
+        project_name: {
+          type: "string",
+          description: "Name of the project",
+          pattern: "^[a-z][a-z0-9-]*$"
+        },
+        project_type: {
+          type: "string",
+          description: "Type of project to generate",
+          enum: [
+            "basic_contract",
+            "dao_project",
+            "prediction_market",
+            "ai_oracle",
+            "defi_protocol",
+            "social_platform",
+            "full_dapp"
+          ],
+          default: "basic_contract"
+        },
+        include_frontend: {
+          type: "boolean",
+          description: "Include frontend application with GenLayerJS",
+          default: false
+        },
+        frontend_framework: {
+          type: "string",
+          description: "Frontend framework (if frontend included)",
+          enum: ["react", "vue", "nextjs", "vanilla"],
+          default: "react"
+        },
+        include_tests: {
+          type: "boolean",
+          description: "Include comprehensive test suite",
+          default: true
+        },
+        include_deployment: {
+          type: "boolean",
+          description: "Include deployment scripts and configuration",
+          default: true
+        },
+        package_manager: {
+          type: "string",
+          description: "Package manager to use",
+          enum: ["npm", "yarn", "pnpm"],
+          default: "npm"
+        }
+      },
+      required: ["project_name"]
+    }
   }
 ];

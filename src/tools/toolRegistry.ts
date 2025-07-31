@@ -108,6 +108,110 @@ export function registerGenLayerTools(server: Server): void {
           };
         }
 
+        case "explain_genlayer_types": {
+          const result = await GenLayerTools.explainGenLayerTypes(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "explain_storage_patterns": {
+          const result = await GenLayerTools.explainStoragePatterns(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_deployment_script": {
+          const result = await GenLayerTools.generateDeploymentScript(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_debugging_guide": {
+          const result = await GenLayerTools.generateDebuggingGuide(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_genlayerjs_integration": {
+          const result = await GenLayerTools.generateGenLayerJSIntegration(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_contract_interaction_examples": {
+          const result = await GenLayerTools.generateContractInteractionExamples(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_testing_framework": {
+          const result = await GenLayerTools.generateTestingFramework(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
+        case "generate_project_boilerplate": {
+          const result = await GenLayerTools.generateProjectBoilerplate(args as any);
+          return {
+            content: [
+              {
+                type: "text",
+                text: result.content
+              }
+            ],
+            isError: result.isError
+          };
+        }
+
         default:
           throw new Error(`Unknown tool: ${name}`);
       }
