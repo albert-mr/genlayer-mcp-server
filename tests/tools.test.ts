@@ -37,7 +37,7 @@ describe('GenLayerTools', () => {
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('process_with_llm');
-      expect(result.content).toContain('gl.exec_prompt');
+      expect(result.content).toContain('gl.nondet.exec_prompt');
       expect(result.content).toContain('gl.eq_principle_strict_eq');
       expect(result.content).toContain('analyze_sentiment');
     });
@@ -262,7 +262,7 @@ describe('GenLayerTools', () => {
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('LLM Integration');
-      expect(result.content).toContain('gl.exec_prompt');
+      expect(result.content).toContain('gl.nondet.exec_prompt');
       expect(result.content).toContain('Large Language Models');
     });
 

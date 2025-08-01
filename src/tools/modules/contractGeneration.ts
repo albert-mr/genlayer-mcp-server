@@ -84,7 +84,6 @@ ${contractCode}
 \`\`\`
 
 ## Usage Notes
-- Deploy this contract to GenLayer testnet or mainnet
 - All methods marked with @gl.public.view are read-only
 - Methods marked with @gl.public.write modify contract state
 - LLM methods use equivalence principles for consensus
@@ -94,7 +93,7 @@ ${contractCode}
 1. Review the generated contract code
 2. Customize the business logic as needed
 3. Test on GenLayer Studio: https://studio.genlayer.com/
-4. Deploy to your preferred GenLayer network`,
+`,
       };
     } catch (error) {
       return {
@@ -132,7 +131,6 @@ ${contractCode}
 1. Review the generated template code
 2. Customize parameters and business logic
 3. Test on GenLayer Studio
-4. Deploy when ready
 
 ## Template-Specific Notes
 ${this.getTemplateNotes(params.template_type)}`,
@@ -199,16 +197,15 @@ ${marketCode}
 - **Multi-Source Validation**: Checks multiple web sources for accuracy
 
 ## Usage Instructions
-1. Deploy the contract with proper constructor arguments
-2. Users can place bets using place_bet() method
-3. Resolve market using resolve_market() when deadline reached
-4. Winners can claim payouts using claim_winnings()
+1. Users can place bets using place_bet() method
+2. Resolve market using resolve_market() when deadline reached
+3. Winners can claim payouts using claim_winnings()
 
 ## Next Steps
 1. Review and customize the resolution logic
 2. Test with small amounts on testnet
 3. Configure reliable web sources
-4. Deploy to mainnet when ready`,
+`,
       };
     } catch (error) {
       return {
@@ -250,10 +247,9 @@ ${vectorStoreCode}
 - **AI Integration**: Compatible with GenLayer's LLM features
 
 ## Usage Instructions
-1. Deploy the vector store contract
-2. Add texts using add_text() method
-3. Search using search_similar() method
-4. Query store info with get_store_info()
+1. Add texts using add_text() method
+2. Search using search_similar() method
+3. Query store info with get_store_info()
 
 ## Next Steps
 1. Configure metadata schema for your use case
@@ -306,7 +302,7 @@ ${updatedCode}
 1. Review the added validation logic
 2. Test the consensus behavior
 3. Adjust tolerance if needed
-4. Deploy and monitor validator agreement`,
+`,
       };
     } catch (error) {
       return {
@@ -351,7 +347,7 @@ ${updatedCode}
 1. Test the web data fetching functionality
 2. Verify data processing logic
 3. Monitor validator consensus on web data
-4. Deploy and monitor performance`,
+`,
       };
     } catch (error) {
       return {

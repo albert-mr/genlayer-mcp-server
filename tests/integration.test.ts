@@ -97,7 +97,7 @@ describe('Integration Tests', () => {
       expect(response.result.content[0].type).toBe('text');
       expect(response.result.content[0].text).toContain('TestContract');
       expect(response.result.content[0].text).toContain('process_with_llm');
-      expect(response.result.content[0].text).toContain('gl.exec_prompt');
+      expect(response.result.content[0].text).toContain('gl.nondet.exec_prompt');
     });
 
     it('should create prediction market via MCP', async () => {
@@ -217,7 +217,7 @@ describe('Integration Tests', () => {
       expect(contractCode).toContain('process_with_llm');
       expect(contractCode).toContain('analyze_sentiment');
       expect(contractCode).toContain('generate_response');
-      expect(contractCode).toContain('gl.exec_prompt');
+      expect(contractCode).toContain('gl.nondet.exec_prompt');
       expect(contractCode).toContain('gl.eq_principle_strict_eq');
       expect(contractCode).toContain('gl.eq_principle_prompt_non_comparative');
 
