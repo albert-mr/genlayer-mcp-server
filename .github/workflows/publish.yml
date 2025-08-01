@@ -1,12 +1,19 @@
-name: Publish to NPM
+name: Publish Package
 
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     
     steps:
     - name: Checkout code
@@ -16,18 +23,38 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        registry-url: 'https://registry.npmjs.org'
+        cache: 'npm'
         
     - name: Install dependencies
       run: npm ci
       
-    - name: Run tests
-      run: npm test
-      
     - name: Build
       run: npm run build
       
-    - name: Publish to NPM
+    - name: Run linting
+      run: npm run lint
+      
+    # Publish to npm
+    - name: Setup Node.js for npm
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://registry.npmjs.org/'
+        
+    - name: Publish to npm
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
+    # Publish to GitHub Packages
+    - name: Setup Node.js for GitHub Packages
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        registry-url: 'https://npm.pkg.github.com/'
+        scope: '@albert-mr'
+        
+    - name: Publish to GitHub Packages
+      run: node scripts/publish-github.js
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
