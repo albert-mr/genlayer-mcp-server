@@ -570,7 +570,7 @@ def debug_web_fetch(self, url: str) -> str:
         print(f"Fetching from: {url}")
         
         try:
-            data = gl.get_webpage(url, mode="text")
+            data = gl.nondet.web.render(url, mode="text")
             print(f"Fetched {len(data)} characters")
             
             # Process data

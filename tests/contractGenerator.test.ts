@@ -68,7 +68,7 @@ describe('GenLayerContractGenerator', () => {
       expect(enhancedContract).toContain('def process_with_llm(self, input_text: str, prompt_type: str = "general") -> str:');
       expect(enhancedContract).toContain('def analyze_sentiment(self, text: str) -> str:');
       expect(enhancedContract).toContain('def generate_response(self, user_input: str, context: str = "") -> str:');
-      expect(enhancedContract).toContain('gl.exec_prompt');
+      expect(enhancedContract).toContain('gl.nondet.exec_prompt');
       expect(enhancedContract).toContain('gl.eq_principle_strict_eq');
       expect(enhancedContract).toContain('gl.eq_principle_prompt_non_comparative');
       expect(enhancedContract).toContain(requirements);
@@ -157,7 +157,7 @@ describe('GenLayerContractGenerator', () => {
       );
 
       expect(marketContract).toContain('gl.get_webpage(source_url, mode="text")');
-      expect(marketContract).toContain('gl.exec_prompt(task)');
+      expect(marketContract).toContain('gl.nondet.exec_prompt(task)');
       expect(marketContract).toContain('gl.eq_principle_strict_eq');
       expect(marketContract).toContain('resolution_evidence');
       expect(marketContract).toContain('json.loads(resolution_result)');
@@ -247,7 +247,7 @@ describe('GenLayerContractGenerator', () => {
       expect(template).toContain('class TestDAO(gl.Contract):');
       expect(template).toContain('Intelligent DAO Governance Contract');
       expect(template).toContain('def create_proposal(self, title: str, description: str) -> typing.Any:');
-      expect(template).toContain('gl.exec_prompt(task)');
+      expect(template).toContain('gl.nondet.exec_prompt(task)');
       expect(template).toContain('json.loads(analysis_result)');
     });
 

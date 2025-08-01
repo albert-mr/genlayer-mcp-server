@@ -358,7 +358,7 @@ GenLayer smart contracts can directly access web APIs and fetch real-time data w
 
 ## Core Web Functions
 
-### 1. gl.get_webpage()
+### 1. gl.nondet.web.render()
 Fetch web content directly in contracts.
 
 ${params.include_examples ? `\`\`\`python
@@ -371,11 +371,11 @@ def fetch_price_data(self, symbol: str) -> str:
         
         try:
             # Primary source
-            data1 = gl.get_webpage(url1, mode="text")
+            data1 = gl.nondet.web.render(url1, mode="text")
             return data1
         except:
             # Fallback source
-            data2 = gl.get_webpage(url2, mode="text")
+            data2 = gl.nondet.web.render(url2, mode="text")
             return data2
     
     # Ensure consensus on web data
@@ -392,7 +392,7 @@ ${params.include_examples ? `\`\`\`python
 def get_weather_report(self, city: str) -> str:
     def weather_task() -> str:
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid=API_KEY"
-        raw_data = gl.get_webpage(url, mode="text")
+        raw_data = gl.nondet.web.render(url, mode="text")
         
         # Use LLM to process the JSON response
         prompt = f\"\"\"
@@ -427,7 +427,7 @@ def verified_news_summary(self, topic: str) -> str:
         articles = []
         for source in sources:
             try:
-                data = gl.get_webpage(source, mode="text")
+                data = gl.nondet.web.render(source, mode="text")
                 articles.append(data)
             except:
                 continue
@@ -466,7 +466,7 @@ class WebMonitor(gl.Contract):
     @gl.public.write
     def monitor_endpoint(self, url: str, check_interval: u256) -> str:
         def monitor_task() -> str:
-            current_data = gl.get_webpage(url, mode="text")
+            current_data = gl.nondet.web.render(url, mode="text")
             current_hash = gl.hash(current_data)
             
             previous_hash = self.last_hashes.get(url, "")
@@ -494,7 +494,7 @@ def social_sentiment_analysis(self, hashtag: str) -> str:
         # Hypothetical social media API
         api_url = f"https://api.socialmedia.com/sentiment?tag={hashtag}&limit=100"
         
-        raw_tweets = gl.get_webpage(api_url, mode="text")
+        raw_tweets = gl.nondet.web.render(api_url, mode="text")
         
         # Process with LLM
         analysis_prompt = f\"\"\"
@@ -774,8 +774,8 @@ def analyze_market_sentiment(self, symbol: str) -> str:
         news_url = f"https://newsapi.org/v2/everything?q={symbol}"
         social_url = f"https://api.twitter.com/2/tweets/search/recent?query={symbol}"
         
-        news_data = gl.get_webpage(news_url, mode="text")
-        social_data = gl.get_webpage(social_url, mode="text")
+        news_data = gl.nondet.web.render(news_url, mode="text")
+        social_data = gl.nondet.web.render(social_url, mode="text")
         
         # Analyze with AI
         analysis_prompt = f\"\"\"
@@ -806,7 +806,7 @@ class AdaptiveGovernance(gl.Contract):
     def evaluate_governance(self, proposal: str) -> str:
         def evaluation_task() -> str:
             # Get current market conditions
-            market_data = gl.get_webpage("https://api.market.com/conditions", mode="text")
+            market_data = gl.nondet.web.render("https://api.market.com/conditions", mode="text")
             
             # Evaluate proposal with current context
             prompt = f\"\"\"

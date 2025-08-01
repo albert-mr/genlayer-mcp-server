@@ -32,6 +32,7 @@ export class GenLayerContractGenerator {
   ): string {
     let contractCode = `# { "Depends": "py-genlayer:test" }
 from genlayer import *
+from genlayer.gl.vm import UserError
 import typing
 import json
 import re
@@ -139,7 +140,7 @@ class ${contractName}(gl.Contract):
       "                \n" +
       '                Return a processed version of the text."""\n' +
       "            \n" +
-      "            result = gl.exec_prompt(task)\n" +
+      "            result = gl.nondet.exec_prompt(task)\n" +
       "            return result.strip()\n" +
       "        \n" +
       "        # Use strict equality for consistent processing\n" +
@@ -152,7 +153,7 @@ class ${contractName}(gl.Contract):
       "        Analyze sentiment of text using non-comparative equivalence principle\n" +
       '        """\n' +
       "        result = gl.eq_principle_prompt_non_comparative(\n" +
-      "            lambda: gl.exec_prompt(f\"Analyze the sentiment of this text: '{text}'. Return only: positive, negative, or neutral\"),\n" +
+      "            lambda: gl.nondet.exec_prompt(f\"Analyze the sentiment of this text: '{text}'. Return only: positive, negative, or neutral\"),\n" +
       '            task="Classify sentiment as positive, negative, or neutral",\n' +
       '            criteria="""The output must be exactly one of: positive, negative, neutral.\n' +
       "                        Consider context, tone, and implied meaning.\n" +
@@ -178,7 +179,7 @@ class ${contractName}(gl.Contract):
       '                "category": "question/request/information/other"\n' +
       '            }}"""\n' +
       "            \n" +
-      "            result = gl.exec_prompt(prompt)\n" +
+      "            result = gl.nondet.exec_prompt(prompt)\n" +
       "            # Clean and parse JSON response\n" +
       '            cleaned_result = result.replace("```json", "").replace("```", "").strip()\n' +
       "            parsed = json.loads(cleaned_result)\n" +
@@ -206,8 +207,8 @@ class ${contractName}(gl.Contract):
         Processing: ${processingLogic}
         """
         # This would interface with GenLayer's web access capabilities
-        # Actual implementation would use gl.web.fetch() or similar
-        # data = gl.web.fetch("${urlTemplate}")
+        # Actual implementation would use gl.nondet.web.render() or similar
+        # data = gl.nondet.web.render("${urlTemplate}")
         # processed_data = self._process_web_data(data)
         return {"url_template": "${urlTemplate}", "status": "fetched"}  # Placeholder return
     
@@ -253,6 +254,7 @@ class ${contractName}(gl.Contract):
 # { "Depends": "py-lib-genlayermodelwrappers:test" }
 
 from genlayer import *
+from genlayer.gl.vm import UserError
 from backend.node.genvm.std.vector_store import VectorStore
 
 class ${storeName}(gl.Contract):
@@ -301,6 +303,7 @@ class ${storeName}(gl.Contract):
     const marketCode = `# { "Depends": "py-genlayer:test" }
 
 from genlayer import *
+from genlayer.gl.vm import UserError
 from typing import List
 
 class ${marketName}(gl.Contract):
@@ -432,11 +435,14 @@ class ${marketName}(gl.Contract):
       bool: "bool",
       address: "Address",
       list: "DynArray[str]",
+      array: "DynArray[str]",
       dict: "TreeMap[str, str]",
       dictionary: "TreeMap[str, str]",
+      map: "TreeMap[str, str]",
       float: "f64",
       decimal: "f64",
       bytes: "bytes",
+      timestamp: "u256",
     };
 
     return typeMap[type.toLowerCase()] || type;
@@ -489,6 +495,7 @@ class ${marketName}(gl.Contract):
   ): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
+from genlayer.gl.vm import UserError
 import typing
 import json
 
@@ -515,7 +522,7 @@ class ${contractName}(gl.Contract):
             Description: {description}
             
             Return JSON: {{"validity": true/false, "category": "governance/technical/financial"}}"""
-            return gl.exec_prompt(task)
+            return gl.nondet.exec_prompt(task)
         
         analysis_result = gl.eq_principle_strict_eq(analyze_proposal)
         self.proposal_count += u256(1)
@@ -530,6 +537,7 @@ class ${contractName}(gl.Contract):
   ): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
+from genlayer.gl.vm import UserError
 import typing
 import json
 
@@ -550,7 +558,7 @@ class ${contractName}(gl.Contract):
             Content: {content}
             
             Return JSON: {{"approved": true/false, "violations": [], "severity": "low/medium/high"}}"""
-            return gl.exec_prompt(task)
+            return gl.nondet.exec_prompt(task)
         
         result = gl.eq_principle_prompt_non_comparative(
             analyze_content,
@@ -569,6 +577,7 @@ class ${contractName}(gl.Contract):
   ): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
+from genlayer.gl.vm import UserError
 import typing
 
 class ${contractName}(gl.Contract):
@@ -588,7 +597,7 @@ class ${contractName}(gl.Contract):
             Topic: {topic}
             
             Return JSON: {{"sentiment": "positive/negative/neutral", "confidence": 0.0-1.0}}"""
-            return gl.exec_prompt(task)
+            return gl.nondet.exec_prompt(task)
         
         result = gl.eq_principle_strict_eq(sentiment_analysis)
         self.analysis_count += u256(1)
@@ -603,6 +612,7 @@ class ${contractName}(gl.Contract):
   ): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
+from genlayer.gl.vm import UserError
 import typing
 
 class ${contractName}(gl.Contract):
@@ -621,7 +631,7 @@ class ${contractName}(gl.Contract):
             task = f"""Fetch and analyze {data_type} data for: {query}
             
             Return JSON: {{"consensus_value": "value", "confidence": 0.0-1.0, "sources": 3}}"""
-            return gl.exec_prompt(task)
+            return gl.nondet.exec_prompt(task)
         
         result = gl.eq_principle_strict_eq(consensus_fetch)
         self.update_count += u256(1)
