@@ -60,7 +60,7 @@
     "url": "https://github.com/albert-mr/genlayer-mcp-server/issues"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://npm.pkg.github.com/",
+    "access": "public"
   }
 }

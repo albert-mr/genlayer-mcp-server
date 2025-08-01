@@ -3,8 +3,8 @@
 // Script to publish to GitHub Packages
 // This ensures the package is correctly configured for GitHub Packages
 
-const fs = require('fs');
-const { execSync } = require('child_process');
+import fs from 'fs';
+import { execSync } from 'child_process';
 
 // Read the current package.json
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
@@ -24,11 +24,15 @@ fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
 try {
   // Publish to GitHub Packages
   console.log('Publishing to GitHub Packages...');
-  execSync('npm publish', { stdio: 'inherit' });
+  execSync('npm publish --ignore-scripts', { stdio: 'inherit' });
   console.log('Successfully published to GitHub Packages!');
 } catch (error) {
-  console.error('Failed to publish to GitHub Packages:', error.message);
-  process.exit(1);
+  if (error.message.includes('version already exists')) {
+    console.log('Version already exists on GitHub Packages, skipping...');
+  } else {
+    console.error('Failed to publish to GitHub Packages:', error.message);
+    process.exit(1);
+  }
 } finally {
   // Restore the original package.json
   fs.writeFileSync('package.json', JSON.stringify(originalPackageJson, null, 2));

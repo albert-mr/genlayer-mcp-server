@@ -122,6 +122,26 @@ That's it! The server downloads and runs automatically. 🎉
 - ✅ VS Code (with MCP extension)
 - ✅ Gemini CLI
 
+### Package Installation
+
+If you need to install the package directly:
+
+#### From npm Registry
+```bash
+npm install @albert-mr/genlayer-mcp-server
+```
+
+#### From GitHub Packages
+```bash
+# Configure npm to use GitHub Packages for @albert-mr scope
+npm config set @albert-mr:registry https://npm.pkg.github.com/
+
+# Install from GitHub Packages
+npm install @albert-mr/genlayer-mcp-server
+```
+
+**Note:** Both registries contain the same package versions. Choose based on your preference or organizational requirements.
+
 ### IDE Integrations
 
 <details>

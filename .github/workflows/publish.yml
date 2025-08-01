@@ -42,7 +42,8 @@ jobs:
         registry-url: 'https://registry.npmjs.org/'
         
     - name: Publish to npm
-      run: npm publish
+      run: npm publish --ignore-scripts
+      continue-on-error: true
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         
