@@ -6,22 +6,6 @@
 
 A comprehensive MCP (Model Context Protocol) server for generating sophisticated GenLayer Intelligent Contracts with AI-native blockchain capabilities.
 
-## 📑 Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [Installation Guide](#-installation-guide)
-  - [NPX Method (Recommended)](#npx-method-recommended)
-  - [IDE Integrations](#ide-integrations)
-  - [Self-Hosting Options](#self-hosting-options)
-- [Testing](#-testing)
-- [Architecture](#%EF%B8%8F-architecture)
-- [Development](#-development)
-- [GenLayer Resources](#-genlayer-resources)
-- [Contributing](#-contributing)
-- [Support](#-support)
-
 ## ⚠️ Disclaimer
 
 **This project was created as an experimental proof-of-concept to test the capabilities of combining [Goose](https://github.com/block/goose) + [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) and [Claude Code](https://github.com/anthropics/claude-code).** This has been vibecoded, so be aware of that. Errors or inconsistencies may occur.
