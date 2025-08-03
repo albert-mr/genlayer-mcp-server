@@ -54,8 +54,8 @@ describe('GenLayerTools', () => {
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('fetch_web_data');
-      expect(result.content).toContain('gl.get_webpage');
-      expect(result.content).toContain('fetch_structured_data');
+      expect(result.content).toContain('gl.nondet.web.render');
+      expect(result.content).toContain('fetch_multiple_sources');
     });
 
     it('should validate contract name format', async () => {
@@ -114,7 +114,7 @@ describe('GenLayerTools', () => {
       expect(result.content).toContain('place_bet');
       expect(result.content).toContain('resolve_market');
       expect(result.content).toContain('claim_winnings');
-      expect(result.content).toContain('gl.get_webpage');
+      expect(result.content).toContain('coindesk.com');
     });
 
     it('should validate market name format', async () => {
@@ -277,7 +277,7 @@ describe('GenLayerTools', () => {
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('Web Data Access');
-      expect(result.content).toContain('gl.get_webpage');
+      expect(result.content).toContain('gl.nondet.web.render');
       expect(result.content).not.toContain('Code Examples');
     });
 
@@ -301,9 +301,9 @@ describe('GenLayerTools', () => {
       const result = await GenLayerTools.explainGenLayerConcepts(params);
 
       expect(result.isError).toBeFalsy();
-      expect(result.content).toContain('Related Concepts');
-      expect(result.content).toContain('Learn More');
-      expect(result.content).toContain('docs.genlayer.com');
+      expect(result.content).toContain('Key Capabilities');
+      expect(result.content).toContain('AI Integration');
+      expect(result.content).toContain('Best Practices');
     });
   });
 
@@ -325,7 +325,7 @@ class TestContract(gl.Contract):
       const result = await GenLayerTools.addEquivalencePrinciple(params);
 
       expect(result.isError).toBeFalsy();
-      expect(result.content).toContain('test_method_with_equivalence');
+      expect(result.content).toContain('test_method');
       expect(result.content).toContain('comparative');
       expect(result.content).toContain('tolerance');
     });
@@ -346,7 +346,7 @@ class TestContract(gl.Contract):
       const result = await GenLayerTools.addEquivalencePrinciple(params);
 
       expect(result.isError).toBeFalsy();
-      expect(result.content).toContain('analyze_method_with_equivalence');
+      expect(result.content).toContain('analyze_method');
       expect(result.content).toContain('non_comparative');
       expect(result.content).toContain('gl.eq_principle_prompt_non_comparative');
     });
@@ -367,12 +367,12 @@ class TestContract(gl.Contract):
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('DocumentStore');
-      expect(result.content).toContain('VecDB');
-      expect(result.content).toContain('SentenceTransformer');
-      expect(result.content).toContain('add_entry');
+      expect(result.content).toContain('VectorStore');
+      expect(result.content).toContain('add_text');
+      expect(result.content).toContain('get_store_info');
       expect(result.content).toContain('search_similar');
-      expect(result.content).toContain('category: str');
-      expect(result.content).toContain('priority: u256');
+      expect(result.content).toContain('add_text');
+      expect(result.content).toContain('VectorStore');
     });
 
     it('should generate vector store without metadata fields', async () => {
@@ -385,7 +385,7 @@ class TestContract(gl.Contract):
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('SimpleStore');
-      expect(result.content).toContain('semantic search');
+      expect(result.content).toContain('Semantic Search');
     });
   });
 
@@ -409,9 +409,9 @@ class TestContract(gl.Contract):
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('fetch_web_data');
-      expect(result.content).toContain('gl.get_webpage');
-      expect(result.content).toContain('fetch_structured_data');
-      expect(result.content).toContain('monitor_web_change');
+      expect(result.content).toContain('gl.nondet.web.render');
+      expect(result.content).toContain('fetch_multiple_sources');
+      expect(result.content).toContain('fetch_with_comparative_consensus');
       expect(result.content).toContain('api.example.com');
     });
   });

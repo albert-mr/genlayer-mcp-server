@@ -200,25 +200,170 @@ class ${contractName}(gl.Contract):
   ): string {
     const webMethod = `
     @gl.public.write
-    def fetch_web_data(self) -> dict:
+    def fetch_web_data(self, url: str = "${urlTemplate}", mode: str = "text") -> dict:
         """
-        Fetch data from web sources
+        Fetch and process web data using GenLayer's native capabilities
         URL: ${urlTemplate}
         Processing: ${processingLogic}
+        Modes: text, html, screenshot
         """
-        # This would interface with GenLayer's web access capabilities
-        # Actual implementation would use gl.nondet.web.render() or similar
-        # data = gl.nondet.web.render("${urlTemplate}")
-        # processed_data = self._process_web_data(data)
-        return {"url_template": "${urlTemplate}", "status": "fetched"}  # Placeholder return
+        def web_fetch_task() -> str:
+            try:
+                # Use GenLayer's actual web rendering capabilities
+                if mode not in ["text", "html", "screenshot"]:
+                    raise Exception(f"Invalid mode: {mode}. Use 'text', 'html', or 'screenshot'")
+                
+                raw_data = gl.nondet.web.render(url, mode=mode)
+                
+                # Process data with AI according to specified logic
+                processed = gl.nondet.exec_prompt(f'''
+                Process this web data according to: ${processingLogic}
+                
+                Raw data: {raw_data}
+                
+                Instructions:
+                1. Extract relevant information based on the processing logic
+                2. Clean and structure the data
+                3. Return valid JSON format
+                4. Handle any parsing errors gracefully
+                
+                Return a clean, structured JSON response with the processed data.
+                ''')
+                
+                return processed.strip()
+                
+            except Exception as e:
+                # Return error information for debugging
+                return json.dumps({
+                    "error": str(e),
+                    "url": url,
+                    "mode": mode,
+                    "status": "failed"
+                })
+        
+        # Use strict equality for deterministic web data processing
+        result_str = gl.eq_principle_strict_eq(web_fetch_task)
+        
+        try:
+            # Parse the JSON result
+            result_data = json.loads(result_str)
+            
+            # Add metadata about the request
+            result_data.update({
+                "url": url,
+                "mode": mode,
+                "timestamp": "placeholder_timestamp",  # Would use actual timestamp in real implementation
+                "status": "success" if "error" not in result_data else "error"
+            })
+            
+            return result_data
+            
+        except json.JSONDecodeError:
+            # Handle case where LLM didn't return valid JSON
+            return {
+                "raw_response": result_str,
+                "url": url,
+                "mode": mode,
+                "status": "json_parse_error",
+                "error": "Failed to parse LLM response as JSON"
+            }
     
-    def _process_web_data(self, data: dict) -> dict:
+    @gl.public.write
+    def fetch_multiple_sources(self, urls: DynArray[str], processing_instruction: str = "${processingLogic}") -> dict:
         """
-        Process fetched web data
-        Logic: ${processingLogic}
+        Fetch data from multiple web sources and aggregate results
         """
-        # Processing logic implementation
-        return data
+        def multi_source_task() -> str:
+            results = []
+            
+            for url in urls:
+                try:
+                    data = gl.nondet.web.render(url, mode="text")
+                    results.append({"url": url, "data": data, "status": "success"})
+                except Exception as e:
+                    results.append({"url": url, "error": str(e), "status": "failed"})
+            
+            # Process aggregated data with AI
+            aggregated_prompt = f'''
+            Process data from multiple web sources according to: {processing_instruction}
+            
+            Source data: {json.dumps(results)}
+            
+            Instructions:
+            1. Aggregate and cross-reference information from all sources
+            2. Identify patterns, discrepancies, or consensus across sources
+            3. Extract the most reliable and relevant information
+            4. Return structured JSON with aggregated insights
+            
+            Provide a comprehensive analysis combining all source data.
+            '''
+            
+            processed = gl.nondet.exec_prompt(aggregated_prompt)
+            return processed.strip()
+        
+        result_str = gl.eq_principle_strict_eq(multi_source_task)
+        
+        try:
+            aggregated_data = json.loads(result_str)
+            return {
+                "aggregated_result": aggregated_data,
+                "source_count": len(urls),
+                "sources": list(urls),
+                "status": "success"
+            }
+        except json.JSONDecodeError:
+            return {
+                "raw_response": result_str,
+                "source_count": len(urls),
+                "sources": list(urls),
+                "status": "json_parse_error",
+                "error": "Failed to parse aggregated response as JSON"
+            }
+    
+    @gl.public.write
+    def fetch_with_comparative_consensus(self, url: str, analysis_criteria: str = "${processingLogic}") -> dict:
+        """
+        Fetch web data with comparative consensus validation for numerical results
+        """
+        def comparative_web_task() -> str:
+            raw_data = gl.nondet.web.render(url, mode="text")
+            
+            analysis_prompt = f'''
+            Analyze web data and extract numerical insights according to: {analysis_criteria}
+            
+            Data: {raw_data}
+            
+            Return JSON with numerical analysis where applicable.
+            Include confidence scores and reasoning.
+            '''
+            
+            result = gl.nondet.exec_prompt(analysis_prompt)
+            return result.strip()
+        
+        # Use comparative consensus for numerical results with tolerance
+        result_str = gl.eq_principle_prompt_comparative(
+            comparative_web_task,
+            task="Extract and analyze numerical data from web source",
+            tolerance=0.1  # 10% tolerance for numerical variations
+        )
+        
+        try:
+            analysis_result = json.loads(result_str)
+            return {
+                "analysis": analysis_result,
+                "url": url,
+                "validation_method": "comparative_consensus",
+                "tolerance": 0.1,
+                "status": "success"
+            }
+        except json.JSONDecodeError:
+            return {
+                "raw_response": result_str,
+                "url": url,
+                "validation_method": "comparative_consensus",
+                "status": "json_parse_error",
+                "error": "Failed to parse consensus response as JSON"
+            }
     
 `;
 

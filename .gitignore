@@ -45,3 +45,6 @@ coverage/
 *.tgz
 
 CLAUDE.md
+
+# Analysis and planning documents
+improvements.md

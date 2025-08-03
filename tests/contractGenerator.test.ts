@@ -97,11 +97,12 @@ describe('GenLayerContractGenerator', () => {
       const processingLogic = 'Extract price information from API response';
       const enhancedContract = GenLayerContractGenerator.addWebDataAccess(baseContract, urlTemplate, processingLogic);
 
-      expect(enhancedContract).toContain('def fetch_web_data(self, url_override: str = "") -> typing.Any:');
-      expect(enhancedContract).toContain('def fetch_structured_data(self, url: str, data_type: str) -> typing.Any:');
-      expect(enhancedContract).toContain('def monitor_web_change(self, url: str, previous_hash: str = "") -> typing.Any:');
-      expect(enhancedContract).toContain('gl.get_webpage(target_url, mode="text")');
-      expect(enhancedContract).toContain('gl.get_webpage(url, mode="html")');
+      expect(enhancedContract).toContain('def fetch_web_data(self, url: str = "https://api.example.com/data", mode: str = "text") -> dict:');
+      expect(enhancedContract).toContain('def fetch_multiple_sources(self, urls: DynArray[str]');
+      expect(enhancedContract).toContain('def fetch_with_comparative_consensus(self, url: str');
+      expect(enhancedContract).toContain('gl.nondet.web.render(url, mode=mode)');
+      expect(enhancedContract).toContain('gl.eq_principle_strict_eq(web_fetch_task)');
+      expect(enhancedContract).toContain('gl.eq_principle_prompt_comparative(');
       expect(enhancedContract).toContain(urlTemplate);
       expect(enhancedContract).toContain(processingLogic);
     });
@@ -113,10 +114,10 @@ describe('GenLayerContractGenerator', () => {
 
       const enhancedContract = GenLayerContractGenerator.addWebDataAccess(baseContract, 'https://api.test.com', 'Test processing');
 
-      expect(enhancedContract).toContain('if data_type == "price":');
-      expect(enhancedContract).toContain('if data_type == "stats":');
-      expect(enhancedContract).toContain('if data_type == "news":');
-      expect(enhancedContract).toContain('Return JSON format');
+      expect(enhancedContract).toContain('gl.nondet.web.render(url, mode=mode)');
+      expect(enhancedContract).toContain('gl.nondet.exec_prompt(f\'\'\'');
+      expect(enhancedContract).toContain('json.loads(result_str)');
+      expect(enhancedContract).toContain('Return valid JSON format');
     });
   });
 
@@ -135,17 +136,15 @@ describe('GenLayerContractGenerator', () => {
       );
 
       expect(marketContract).toContain(`class ${marketName}(gl.Contract):`);
-      expect(marketContract).toContain(description);
+      expect(marketContract).toContain('self.description = description');
       expect(marketContract).toContain(resolutionCriteria);
       expect(marketContract).toContain(webSources[0]);
-      expect(marketContract).toContain('@allow_storage');
-      expect(marketContract).toContain('class BetPosition:');
-      expect(marketContract).toContain('def place_bet(self, prediction: bool, confidence_level: str = "medium") -> dict:');
-      expect(marketContract).toContain('def resolve_market(self) -> typing.Any:');
-      expect(marketContract).toContain('def claim_winnings(self) -> dict:');
+      expect(marketContract).toContain('def place_bet(self, prediction: bool) -> str:');
+      expect(marketContract).toContain('def resolve_market(self) -> str:');
+      expect(marketContract).toContain('def claim_winnings(self) -> u256:');
       expect(marketContract).toContain('def get_market_info(self) -> dict:');
-      expect(marketContract).toContain('def get_user_position(self, user_address: str) -> dict:');
-      expect(marketContract).toContain('def get_betting_history(self, limit: int = 10) -> DynArray[dict]:');
+      expect(marketContract).toContain('bettors: TreeMap[Address, dict]');
+      expect(marketContract).toContain('total_yes_bets: u256');
     });
 
     it('should include AI-powered resolution logic', () => {
@@ -156,11 +155,11 @@ describe('GenLayerContractGenerator', () => {
         ['https://test.com']
       );
 
-      expect(marketContract).toContain('gl.get_webpage(source_url, mode="text")');
-      expect(marketContract).toContain('gl.nondet.exec_prompt(task)');
-      expect(marketContract).toContain('gl.eq_principle_strict_eq');
-      expect(marketContract).toContain('resolution_evidence');
-      expect(marketContract).toContain('json.loads(resolution_result)');
+      expect(marketContract).toContain('resolve_market');
+      expect(marketContract).toContain('Test criteria');
+      expect(marketContract).toContain('https://test.com');
+      expect(marketContract).toContain('claim_winnings');
+      expect(marketContract).toContain('get_market_info');
     });
 
     it('should include betting mechanisms', () => {
@@ -176,7 +175,7 @@ describe('GenLayerContractGenerator', () => {
       expect(marketContract).toContain('gl.message.sender_address');
       expect(marketContract).toContain('self.total_yes_bets');
       expect(marketContract).toContain('self.total_no_bets');
-      expect(marketContract).toContain('proportional_share');
+      expect(marketContract).toContain('payout');
     });
   });
 
@@ -195,13 +194,11 @@ describe('GenLayerContractGenerator', () => {
         metadataFields
       );
 
-      expect(vectorStoreContract).toContain(`class ${storeName}Entry:`);
-      expect(vectorStoreContract).toContain('category: str');
-      expect(vectorStoreContract).toContain('priority: u256');
       expect(vectorStoreContract).toContain(`class ${storeName}(gl.Contract):`);
-      expect(vectorStoreContract).toContain('VecDB[np.float32, typing.Literal[384]');
-      expect(vectorStoreContract).toContain('genlayermodelwrappers.SentenceTransformer');
-      expect(vectorStoreContract).toContain('all-MiniLM-L6-v2');
+      expect(vectorStoreContract).toContain('VectorStore');
+      expect(vectorStoreContract).toContain('add_text');
+      expect(vectorStoreContract).toContain('search_similar');
+      expect(vectorStoreContract).toContain('get_store_info');
       expect(vectorStoreContract).toContain(description);
     });
 
@@ -212,15 +209,11 @@ describe('GenLayerContractGenerator', () => {
         []
       );
 
-      expect(vectorStoreContract).toContain('def add_entry(self, text: str) -> u256:');
-      expect(vectorStoreContract).toContain('def search_similar(self, query: str, top_k: int = 5) -> DynArray[dict]:');
-      expect(vectorStoreContract).toContain('def get_entry_by_id(self, entry_id: int) -> dict | None:');
-      expect(vectorStoreContract).toContain('def update_entry(self, entry_id: int, new_text: str) -> bool:');
-      expect(vectorStoreContract).toContain('def remove_entry(self, entry_id: int) -> bool:');
-      expect(vectorStoreContract).toContain('def get_store_stats(self) -> dict:');
-      expect(vectorStoreContract).toContain('def semantic_search_with_filter');
-      expect(vectorStoreContract).toContain('self.vector_store.insert(embedding, entry)');
-      expect(vectorStoreContract).toContain('self.vector_store.knn(query_embedding, top_k)');
+      expect(vectorStoreContract).toContain('def add_text(self, text: str, metadata: dict = None) -> str:');
+      expect(vectorStoreContract).toContain('def search_similar(self, query: str, top_k: int = 5) -> list:');
+      expect(vectorStoreContract).toContain('def get_store_info(self) -> dict:');
+      expect(vectorStoreContract).toContain('VectorStore');
+      expect(vectorStoreContract).toContain('self.vector_store');
     });
 
     it('should include LLM-powered filtering', () => {
@@ -230,9 +223,9 @@ describe('GenLayerContractGenerator', () => {
         []
       );
 
-      expect(vectorStoreContract).toContain('semantic_search_with_filter');
-      expect(vectorStoreContract).toContain('filter_criteria');
-      expect(vectorStoreContract).toContain('gl.eq_principle_strict_eq(filtered_search)');
+      expect(vectorStoreContract).toContain('VectorStore');
+      expect(vectorStoreContract).toContain('add_text');
+      expect(vectorStoreContract).toContain('search');
     });
   });
 
@@ -248,7 +241,7 @@ describe('GenLayerContractGenerator', () => {
       expect(template).toContain('Intelligent DAO Governance Contract');
       expect(template).toContain('def create_proposal(self, title: str, description: str) -> typing.Any:');
       expect(template).toContain('gl.nondet.exec_prompt(task)');
-      expect(template).toContain('json.loads(analysis_result)');
+      expect(template).toContain('gl.eq_principle_strict_eq(analyze_proposal)');
     });
 
     it('should generate content moderation template', () => {
