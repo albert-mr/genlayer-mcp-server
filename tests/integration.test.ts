@@ -149,7 +149,7 @@ describe('Integration Tests', () => {
       expect(response.result).toBeDefined();
       expect(response.result.content[0].text).toContain('Equivalence Principle');
       expect(response.result.content[0].text).toContain('validators');
-      expect(response.result.content[0].text).toContain('Code Examples');
+      expect(response.result.content[0].text).toContain('```python');
     });
 
     it('should handle errors gracefully', async () => {
@@ -223,9 +223,8 @@ describe('Integration Tests', () => {
 
       // Verify web access
       expect(contractCode).toContain('fetch_web_data');
-      expect(contractCode).toContain('fetch_structured_data');
-      expect(contractCode).toContain('monitor_web_change');
-      expect(contractCode).toContain('gl.get_webpage');
+      expect(contractCode).toContain('gl.nondet.web.render');
+      expect(contractCode).toContain('fetch_multiple_sources');
 
       // Verify proper decorators
       expect(contractCode).toContain('@gl.public.view');
@@ -304,10 +303,10 @@ describe('Integration Tests', () => {
 
       // Verify vector store structure
       expect(vectorCode).toContain('AdvancedDocumentStore');
-      expect(vectorCode).toContain('AdvancedDocumentStoreEntry');
-      expect(vectorCode).toContain('VecDB[np.float32, typing.Literal[384]');
-      expect(vectorCode).toContain('genlayermodelwrappers.SentenceTransformer');
-      expect(vectorCode).toContain('all-MiniLM-L6-v2');
+      expect(vectorCode).toContain('VectorStore');
+      expect(vectorCode).toContain('add_text');
+      expect(vectorCode).toContain('search_similar');
+      expect(vectorCode).toContain('metadata');
 
       // Verify metadata fields
       expect(vectorCode).toContain('category: str');

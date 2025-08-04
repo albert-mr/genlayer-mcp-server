@@ -1052,6 +1052,7 @@ ${params.framework !== 'react' ? `\`\`\`html
 
       return {
         content: integration,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -1080,6 +1081,7 @@ This will include:
 - Gas optimization
 
 Full implementation coming soon with practical examples for all interaction methods.`,
+      isError: false,
     };
   }
 
@@ -1102,6 +1104,7 @@ This will include:
 - CI/CD integration
 
 Full implementation coming soon with complete testing solutions.`,
+      isError: false,
     };
   }
 
@@ -1128,6 +1131,7 @@ This will include:
 - Documentation
 
 Full implementation coming soon with complete project scaffolding.`,
+      isError: false,
     };
   }
 }

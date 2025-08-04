@@ -368,6 +368,7 @@ ${params.constructor_args?.map(arg => `- **${arg.name}** (${arg.type}): ${arg.va
 3. Test on localnet first
 4. Deploy to testnet for validation
 5. Deploy to mainnet when ready`,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -817,6 +818,7 @@ async def test_scalability(contract):
 
       return {
         content: guide,
+        isError: false,
       };
     } catch (error) {
       return {

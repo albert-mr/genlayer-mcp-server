@@ -345,6 +345,7 @@ class ComprehensiveContract(gl.Contract):
 
       return {
         content: explanation,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -749,6 +750,7 @@ def transfer(self, to: Address, amount: u256):
 
       return {
         content: explanation,
+        isError: false,
       };
     } catch (error) {
       return {

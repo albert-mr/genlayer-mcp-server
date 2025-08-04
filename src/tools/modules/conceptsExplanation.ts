@@ -1018,6 +1018,7 @@ Regularly update and optimize contracts.`
 
       return {
         content: explanation + (params.detail_level === 'advanced' ? this.getRelatedTopics(params.concept) : ''),
+        isError: false,
       };
     } catch (error) {
       return {

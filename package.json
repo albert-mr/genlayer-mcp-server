@@ -23,8 +23,12 @@
     "test:integration": "npm run build && jest tests/integration.test.ts",
     "test:unit": "jest --testPathIgnorePatterns=integration",
     "clean": "rm -rf dist coverage",
-    "lint": "tsc --noEmit",
-    "validate": "npm run lint && npm run test:unit"
+    "lint": "eslint src/ tests/ --ext .ts",
+    "lint:fix": "eslint src/ tests/ --ext .ts --fix",
+    "format": "prettier --write src/ tests/ *.json *.md",
+    "format:check": "prettier --check src/ tests/ *.json *.md",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run typecheck && npm run lint && npm run format:check && npm run test:unit"
   },
   "keywords": [
     "mcp",
@@ -44,7 +48,11 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
     "jest": "^30.0.5",
+    "prettier": "^3.0.0",
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.0"
   },

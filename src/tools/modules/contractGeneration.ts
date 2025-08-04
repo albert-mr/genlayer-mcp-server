@@ -1,5 +1,6 @@
 // Core Contract Generation Tools
 import { GenLayerContractGenerator } from "../../utils/contractGenerator.js";
+import { GENLAYER_URLS, ERROR_MESSAGES, VALIDATION_PATTERNS } from "../../config/constants.js";
 
 export interface ToolResult {
   content: string;
@@ -17,9 +18,9 @@ export class ContractGenerationTools {
   }): Promise<ToolResult> {
     try {
       // Input validation
-      if (!params.contract_name || !params.contract_name.match(/^[A-Z][a-zA-Z0-9]*$/)) {
+      if (!params.contract_name || !VALIDATION_PATTERNS.pascalCase.test(params.contract_name)) {
         return {
-          content: `Error: Contract name must be in PascalCase and start with a capital letter. Got: ${params.contract_name}`,
+          content: `Error: ${ERROR_MESSAGES.contract.nameFormat}. Got: ${params.contract_name}`,
           isError: true,
         };
       }
@@ -92,8 +93,9 @@ ${contractCode}
 ## Next Steps
 1. Review the generated contract code
 2. Customize the business logic as needed
-3. Test on GenLayer Studio: https://studio.genlayer.com/
+3. Test on GenLayer Studio: ${GENLAYER_URLS.studio}
 `,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -109,6 +111,14 @@ ${contractCode}
     custom_parameters?: any;
   }): Promise<ToolResult> {
     try {
+      // Input validation
+      if (!params.contract_name || !VALIDATION_PATTERNS.pascalCase.test(params.contract_name)) {
+        return {
+          content: `Error: ${ERROR_MESSAGES.contract.nameFormat}. Got: ${params.contract_name}`,
+          isError: true,
+        };
+      }
+
       const contractCode = GenLayerContractGenerator.generateAdvancedContractTemplate(
         params.template_type,
         params.contract_name,
@@ -134,6 +144,7 @@ ${contractCode}
 
 ## Template-Specific Notes
 ${this.getTemplateNotes(params.template_type)}`,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -206,6 +217,7 @@ ${marketCode}
 2. Test with small amounts on testnet
 3. Configure reliable web sources
 `,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -256,6 +268,7 @@ ${vectorStoreCode}
 2. Test with sample data
 3. Integrate with your application
 4. Scale as needed`,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -303,6 +316,7 @@ ${updatedCode}
 2. Test the consensus behavior
 3. Adjust tolerance if needed
 `,
+        isError: false,
       };
     } catch (error) {
       return {
@@ -348,6 +362,7 @@ ${updatedCode}
 2. Verify data processing logic
 3. Monitor validator consensus on web data
 `,
+        isError: false,
       };
     } catch (error) {
       return {

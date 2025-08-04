@@ -8,4 +8,5 @@ const transport = new StdioServerTransport();
 (async () => {
   const server = createServer();
   await server.connect(transport);
+  console.error('GenLayer MCP Server running');
 })();

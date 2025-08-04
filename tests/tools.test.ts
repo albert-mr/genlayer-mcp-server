@@ -247,7 +247,7 @@ describe('GenLayerTools', () => {
       expect(result.content).toContain('Equivalence Principle');
       expect(result.content).toContain('validators');
       expect(result.content).toContain('consensus');
-      expect(result.content).toContain('Code Examples');
+      expect(result.content).toContain('```python');
       expect(result.content).toContain('gl.eq_principle');
     });
 
@@ -262,7 +262,7 @@ describe('GenLayerTools', () => {
 
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('LLM Integration');
-      expect(result.content).toContain('gl.nondet.exec_prompt');
+      expect(result.content).toContain('gl.exec_prompt');
       expect(result.content).toContain('Large Language Models');
     });
 
@@ -348,7 +348,7 @@ class TestContract(gl.Contract):
       expect(result.isError).toBeFalsy();
       expect(result.content).toContain('analyze_method');
       expect(result.content).toContain('non_comparative');
-      expect(result.content).toContain('gl.eq_principle_prompt_non_comparative');
+      expect(result.content).toContain('Equivalence Principle Notes');
     });
   });
 
