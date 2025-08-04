@@ -4,7 +4,8 @@
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
-A comprehensive MCP (Model Context Protocol) server for generating sophisticated GenLayer Intelligent Contracts with AI-native blockchain capabilities.
+A comprehensive MCP (Model Context Protocol) server for generating sophisticated
+GenLayer Intelligent Contracts with AI-native blockchain capabilities.
 
 ## ⚠️ Disclaimer
 
@@ -28,7 +29,11 @@ Contracts** - smart contracts that can:
 - 📊 **Perform semantic search** with built-in vector stores
 - ⚖️ **Reach consensus on AI outputs** using the Equivalence Principle
 
-This MCP server provides tools for generating various types of GenLayer Intelligent Contracts—ranging from basic storage contracts to sophisticated prediction markets, AI-powered oracles, and more—and is designed to make the developer experience easier and more streamlined when building, testing, and deploying intelligent contracts.
+This MCP server provides tools for generating various types of GenLayer
+Intelligent Contracts—ranging from basic storage contracts to sophisticated
+prediction markets, AI-powered oracles, and more—and is designed to make the
+developer experience easier and more streamlined when building, testing, and
+deploying intelligent contracts.
 
 ## 🌐 GenLayer Resources
 
