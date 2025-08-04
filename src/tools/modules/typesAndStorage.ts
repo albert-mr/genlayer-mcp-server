@@ -21,7 +21,9 @@ GenLayer supports various primitive types for blockchain storage and computation
 - **Signed Integers**: i8, i16, i32, i64, i128, i256
 - **bigint**: Arbitrary precision integer (use with caution)
 
-${params.include_examples ? `### Examples:
+${
+  params.include_examples
+    ? `### Examples:
 \`\`\`python
 class Contract(gl.Contract):
     balance: u256          # Large unsigned integer for token balances
@@ -33,7 +35,9 @@ class Contract(gl.Contract):
         self.user_count = u32(0)
         self.temperature = i16(-10)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Other Primitive Types
 - **bool**: Boolean values (True/False) 
@@ -41,7 +45,9 @@ class Contract(gl.Contract):
 - **bytes**: Raw byte sequences
 - **Address**: Blockchain addresses (20 bytes)
 
-${params.include_examples ? `### Examples:
+${
+  params.include_examples
+    ? `### Examples:
 \`\`\`python
 class Contract(gl.Contract):
     is_active: bool
@@ -55,13 +61,19 @@ class Contract(gl.Contract):
         self.data = b"\\x00\\x01\\x02"
         self.owner = gl.message.sender_address
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
-${params.include_comparisons ? `## Differences from Python Types
+${
+  params.include_comparisons
+    ? `## Differences from Python Types
 - Use **u256** instead of **int** for most numeric operations
 - **Address** type ensures proper blockchain address handling
 - All storage types must be explicitly sized for gas optimization
-` : ''}`,
+`
+    : ''
+}`,
 
         collection_types: `# GenLayer Collection Types
 
@@ -72,7 +84,9 @@ GenLayer provides blockchain-optimized collection types:
 - Dynamic sizing with gas-efficient storage
 - Implements MutableSequence interface
 
-${params.include_examples ? `### DynArray Examples:
+${
+  params.include_examples
+    ? `### DynArray Examples:
 \`\`\`python
 class Contract(gl.Contract):
     users: DynArray[str]           # Array of strings
@@ -90,14 +104,18 @@ class Contract(gl.Contract):
     def get_user_count(self) -> u256:
         return u256(len(self.users))
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Tree Maps (TreeMap)
 - Replaces Python's dict[K, V]
 - Ordered key-value storage
 - Implements MutableMapping interface
 
-${params.include_examples ? `### TreeMap Examples:
+${
+  params.include_examples
+    ? `### TreeMap Examples:
 \`\`\`python
 class Contract(gl.Contract):
     user_balances: TreeMap[Address, u256]     # Address -> Balance
@@ -115,7 +133,9 @@ class Contract(gl.Contract):
     def get_balance(self, user: Address) -> u256:
         return self.user_balances.get(user, u256(0))
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         custom_types: `# GenLayer Custom Types
 
@@ -124,7 +144,9 @@ You can create custom types using Python classes with special decorators:
 ## @allow_storage Decorator
 Custom classes must use @allow_storage for blockchain storage:
 
-${params.include_examples ? `### Custom Type Examples:
+${
+  params.include_examples
+    ? `### Custom Type Examples:
 \`\`\`python
 from dataclasses import dataclass
 from genlayer import allow_storage
@@ -163,12 +185,16 @@ class Contract(gl.Contract):
         self.users.append(user)
         return u256(len(self.users) - 1)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Memory Allocation for Custom Types
 Use gl.storage_inmem_allocate for complex nested types:
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 # Allocating custom types with complex fields
 user_data = User(
     name="Alice",
@@ -176,7 +202,9 @@ user_data = User(
     metadata=gl.storage_inmem_allocate(TreeMap[str, str])
 )
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         storage_restrictions: `# GenLayer Storage Restrictions
 
@@ -193,7 +221,9 @@ user_data = User(
 2. **All fields must have type annotations**  
 3. **No instance variables outside class definition**
 
-${params.include_examples ? `### Correct Storage Patterns:
+${
+  params.include_examples
+    ? `### Correct Storage Patterns:
 \`\`\`python
 class Contract(gl.Contract):
     # ✅ Correct declarations
@@ -227,7 +257,9 @@ class Contract(gl.Contract):
     count: u256
     active: bool
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         type_conversions: `# GenLayer Type Conversions
 
@@ -241,7 +273,9 @@ When calling contract methods, GenLayer automatically converts between calldata 
 - **JavaScript objects** → **TreeMap[str, V]** (string keys only)
 - **Hex strings** → **Address** (with 0x prefix)
 
-${params.include_examples ? `### Conversion Examples:
+${
+  params.include_examples
+    ? `### Conversion Examples:
 \`\`\`python
 # Contract method
 @gl.public.write
@@ -256,13 +290,17 @@ await contract.update_user(
     {"level": "premium", "region": "US"}            // → TreeMap[str, str]
 );
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Manual Type Construction
 
 For complex scenarios, construct types explicitly:
 
-${params.include_examples ? `### Manual Construction:
+${
+  params.include_examples
+    ? `### Manual Construction:
 \`\`\`python
 # In contract constructor or methods
 def __init__(self):
@@ -275,7 +313,9 @@ def __init__(self):
     self.metadata["version"] = "1.0"
     self.metadata["author"] = "Developer"
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         all_types: `# Complete GenLayer Type System
 
@@ -296,7 +336,9 @@ def __init__(self):
 - Use GenLayer-specific types, not Python primitives
 - Generic types must be fully specified
 
-${params.include_examples ? `### Complete Example:
+${
+  params.include_examples
+    ? `### Complete Example:
 \`\`\`python
 from dataclasses import dataclass
 from genlayer import *
@@ -331,26 +373,28 @@ class ComprehensiveContract(gl.Contract):
         self.balances = TreeMap[Address, u256]()
         self.profiles = TreeMap[Address, UserProfile]()
 \`\`\`
-` : ''}`
+`
+    : ''
+}`
       };
 
       const explanation = typeExplanations[params.type_category as keyof typeof typeExplanations];
-      
+
       if (!explanation) {
         return {
           content: `Error: Unknown type category '${params.type_category}'. Available categories: primitive_types, collection_types, custom_types, storage_restrictions, type_conversions, all_types`,
-          isError: true,
+          isError: true
         };
       }
 
       return {
         content: explanation,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error explaining GenLayer types: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -374,7 +418,9 @@ Intelligent Contracts store data persistently on the blockchain. Unlike traditio
 3. **Persistence**: Data survives contract executions
 4. **Zero Initialization**: Storage starts at zero values
 
-${params.include_examples ? `### Basic Storage Example:
+${
+  params.include_examples
+    ? `### Basic Storage Example:
 \`\`\`python
 class SimpleStorage(gl.Contract):
     # Storage field declarations
@@ -399,7 +445,9 @@ class SimpleStorage(gl.Contract):
     def get_value(self) -> u256:
         return self.value
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### Default Values:
 - **Numbers**: 0
@@ -414,7 +462,9 @@ DynArray is GenLayer's dynamic array type, replacing Python's list:
 
 ## Common Operations
 
-${params.include_examples ? `### Basic DynArray Operations:
+${
+  params.include_examples
+    ? `### Basic DynArray Operations:
 \`\`\`python
 class ArrayContract(gl.Contract):
     items: DynArray[str]
@@ -447,11 +497,15 @@ class ArrayContract(gl.Contract):
     def item_count(self) -> u256:
         return u256(len(self.items))
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Advanced Patterns
 
-${params.complexity_level === 'advanced' && params.include_examples ? `### Complex DynArray Usage:
+${
+  params.complexity_level === 'advanced' && params.include_examples
+    ? `### Complex DynArray Usage:
 \`\`\`python
 @allow_storage
 @dataclass
@@ -495,7 +549,9 @@ class TaskManager(gl.Contract):
                 user_tasks.append(task)
         return user_tasks
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Performance Considerations:
 - Appending is O(1) amortized
@@ -512,7 +568,9 @@ TreeMap provides ordered key-value storage, replacing Python's dict:
 - **Efficient**: O(log n) operations
 - **Typed**: Both keys and values are strongly typed
 
-${params.include_examples ? `### Basic TreeMap Operations:
+${
+  params.include_examples
+    ? `### Basic TreeMap Operations:
 \`\`\`python
 class MappingContract(gl.Contract):
     balances: TreeMap[Address, u256]
@@ -545,9 +603,13 @@ class MappingContract(gl.Contract):
     def get_metadata(self, key: str) -> str:
         return self.metadata.get(key, "")
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
-${params.complexity_level === 'advanced' && params.include_examples ? `### Advanced TreeMap Patterns:
+${
+  params.complexity_level === 'advanced' && params.include_examples
+    ? `### Advanced TreeMap Patterns:
 \`\`\`python
 class AdvancedMapping(gl.Contract):
     # Nested mappings
@@ -570,7 +632,9 @@ class AdvancedMapping(gl.Contract):
             self.category_items[category] = gl.storage_inmem_allocate(DynArray[str])
         self.category_items[category].append(item)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Common Patterns:
 - **Default Values**: Use .get(key, default) for safe access
@@ -582,7 +646,9 @@ class AdvancedMapping(gl.Contract):
 ## Gas-Efficient Storage Patterns
 
 ### 1. Pack Related Data
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 # ❌ Inefficient - separate storage slots
 class Inefficient(gl.Contract):
     user_active: TreeMap[Address, bool]
@@ -600,10 +666,14 @@ class UserData:
 class Efficient(gl.Contract):
     users: TreeMap[Address, UserData]
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Use Appropriate Integer Sizes
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class OptimizedSizes(gl.Contract):
     # Use smallest sufficient type
     user_count: u32        # Instead of u256 for counters
@@ -611,10 +681,14 @@ class OptimizedSizes(gl.Contract):
     large_balance: u256    # For token amounts
     small_id: u16          # For small identifiers
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Lazy Initialization
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class LazyInit(gl.Contract):
     user_data: TreeMap[Address, UserData]
     
@@ -630,10 +704,14 @@ class LazyInit(gl.Contract):
         else:
             self.user_data[user].balance = balance
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 4. Batch Operations
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def batch_update_balances(self, users: DynArray[Address], amounts: DynArray[u256]):
     # Process multiple updates in single transaction
@@ -641,14 +719,18 @@ def batch_update_balances(self, users: DynArray[Address], amounts: DynArray[u256
         if i < len(amounts):
             self.balances[users[i]] = amounts[i]
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         storage_best_practices: `# GenLayer Storage Best Practices
 
 ## Security Guidelines
 
 ### 1. Validate All Inputs
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def set_user_data(self, user: Address, name: str, age: u8):
     # Validate address
@@ -666,10 +748,14 @@ def set_user_data(self, user: Address, name: str, age: u8):
     # Safe to store
     self.user_profiles[user] = UserProfile(name=name, age=age)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Implement Access Control
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class SecureContract(gl.Contract):
     owner: Address
     admins: TreeMap[Address, bool]
@@ -692,10 +778,14 @@ class SecureContract(gl.Contract):
         self._only_owner()
         self.admins[admin] = True
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Handle Edge Cases
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.view
 def get_user_balance(self, user: Address) -> u256:
     # Safe access with default
@@ -719,7 +809,9 @@ def transfer(self, to: Address, amount: u256):
     self.balances[sender] = sender_balance - amount
     self.balances[to] = recipient_balance + amount
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Performance Guidelines
 
@@ -740,22 +832,22 @@ def transfer(self, to: Address, amount: u256):
       };
 
       const explanation = storageGuides[params.storage_topic as keyof typeof storageGuides];
-      
+
       if (!explanation) {
         return {
           content: `Error: Unknown storage topic '${params.storage_topic}'. Available topics: storage_basics, dynarray_usage, treemap_usage, custom_storage_types, storage_optimization, storage_patterns, storage_best_practices`,
-          isError: true,
+          isError: true
         };
       }
 
       return {
         content: explanation,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error explaining storage patterns: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }

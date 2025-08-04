@@ -7,7 +7,7 @@ describe('Integration Tests', () => {
   const sendMCPRequest = (method: string, params: any = {}): Promise<any> => {
     return new Promise((resolve, reject) => {
       const request = {
-        jsonrpc: "2.0",
+        jsonrpc: '2.0',
         id: Date.now(),
         method,
         params
@@ -18,7 +18,7 @@ describe('Integration Tests', () => {
       }, 10000);
 
       let responseData = '';
-      
+
       const dataHandler = (data: Buffer) => {
         responseData += data.toString();
         try {
@@ -43,7 +43,7 @@ describe('Integration Tests', () => {
     });
 
     // Wait for server to start
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       const handler = (data: Buffer) => {
         if (data.toString().includes('GenLayer MCP Server running')) {
           serverProcess.stderr?.off('data', handler);
@@ -86,9 +86,7 @@ describe('Integration Tests', () => {
           requirements: 'A simple storage contract for testing MCP integration',
           use_llm: true,
           web_access: false,
-          storage_fields: [
-            { name: 'data', type: 'string', description: 'Test data' }
-          ]
+          storage_fields: [{ name: 'data', type: 'string', description: 'Test data' }]
         }
       });
 
@@ -187,7 +185,8 @@ describe('Integration Tests', () => {
         name: 'generate_intelligent_contract',
         arguments: {
           contract_name: 'ComprehensiveContract',
-          requirements: 'A contract that demonstrates all GenLayer features including LLM, web access, and storage',
+          requirements:
+            'A contract that demonstrates all GenLayer features including LLM, web access, and storage',
           use_llm: true,
           web_access: true,
           storage_fields: [
@@ -242,7 +241,8 @@ describe('Integration Tests', () => {
         arguments: {
           market_name: 'AdvancedCryptoPriceMarket',
           description: 'Predict cryptocurrency price movements with advanced features',
-          resolution_criteria: 'Bitcoin price must exceed $75,000 USD by the end of 2024, verified through multiple data sources',
+          resolution_criteria:
+            'Bitcoin price must exceed $75,000 USD by the end of 2024, verified through multiple data sources',
           web_sources: [
             'https://api.coindesk.com/v1/bpi/currentprice.json',
             'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
@@ -263,7 +263,9 @@ describe('Integration Tests', () => {
 
       // Verify betting functionality
       expect(marketCode).toContain('@gl.public.write.payable');
-      expect(marketCode).toContain('def place_bet(self, prediction: bool, confidence_level: str = "medium") -> dict:');
+      expect(marketCode).toContain(
+        'def place_bet(self, prediction: bool, confidence_level: str = "medium") -> dict:'
+      );
       expect(marketCode).toContain('gl.message.value');
       expect(marketCode).toContain('gl.message.sender_address');
 
@@ -275,7 +277,9 @@ describe('Integration Tests', () => {
 
       // Verify advanced features
       expect(marketCode).toContain('def get_user_position(self, user_address: str) -> dict:');
-      expect(marketCode).toContain('def get_betting_history(self, limit: int = 10) -> DynArray[dict]:');
+      expect(marketCode).toContain(
+        'def get_betting_history(self, limit: int = 10) -> DynArray[dict]:'
+      );
       expect(marketCode).toContain('def _calculate_potential_winnings');
 
       // Verify data sources
@@ -360,9 +364,7 @@ describe('Integration Tests', () => {
           requirements: 'A contract for testing response consistency',
           use_llm: false,
           web_access: false,
-          storage_fields: [
-            { name: 'test_field', type: 'string', description: 'Test field' }
-          ]
+          storage_fields: [{ name: 'test_field', type: 'string', description: 'Test field' }]
         }
       };
 

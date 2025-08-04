@@ -2,7 +2,6 @@
 import { VALIDATION_PATTERNS } from '../config/constants.js';
 
 export class SecurityValidator {
-  
   /**
    * Sanitize and validate URLs to prevent malicious injections
    */
@@ -15,7 +14,7 @@ export class SecurityValidator {
 
       // Remove potential whitespace and control characters
       const trimmedUrl = url.trim().replace(/[\x00-\x1F\x7F]/g, '');
-      
+
       // Check for basic URL format
       if (!VALIDATION_PATTERNS.validUrl.test(trimmedUrl)) {
         return { isValid: false, error: 'Invalid URL format' };
@@ -23,7 +22,7 @@ export class SecurityValidator {
 
       // Parse URL to validate components
       const urlObj = new URL(trimmedUrl);
-      
+
       // Security checks
       const allowedProtocols = ['http:', 'https:'];
       if (!allowedProtocols.includes(urlObj.protocol)) {
@@ -55,9 +54,11 @@ export class SecurityValidator {
       }
 
       return { isValid: true, sanitizedUrl: urlObj.toString() };
-      
     } catch (error) {
-      return { isValid: false, error: `Invalid URL: ${error instanceof Error ? error.message : 'Unknown error'}` };
+      return {
+        isValid: false,
+        error: `Invalid URL: ${error instanceof Error ? error.message : 'Unknown error'}`
+      };
     }
   }
 
@@ -75,11 +76,17 @@ export class SecurityValidator {
     // Remove potentially dangerous imports/statements
     const dangerousPatterns = [
       { pattern: /import\s+os/gi, warning: 'Removed OS import (potentially dangerous)' },
-      { pattern: /import\s+subprocess/gi, warning: 'Removed subprocess import (potentially dangerous)' },
+      {
+        pattern: /import\s+subprocess/gi,
+        warning: 'Removed subprocess import (potentially dangerous)'
+      },
       { pattern: /import\s+sys/gi, warning: 'Removed sys import (potentially dangerous)' },
       { pattern: /exec\s*\(/gi, warning: 'Removed exec() call (potentially dangerous)' },
       { pattern: /eval\s*\(/gi, warning: 'Removed eval() call (potentially dangerous)' },
-      { pattern: /__import__\s*\(/gi, warning: 'Removed __import__() call (potentially dangerous)' },
+      {
+        pattern: /__import__\s*\(/gi,
+        warning: 'Removed __import__() call (potentially dangerous)'
+      },
       { pattern: /open\s*\(/gi, warning: 'Removed file open() call (potentially dangerous)' },
       { pattern: /file\s*\(/gi, warning: 'Removed file() call (potentially dangerous)' }
     ];
@@ -105,14 +112,17 @@ export class SecurityValidator {
   /**
    * Validate contract names and identifiers
    */
-  static validateIdentifier(identifier: string, type: 'contract' | 'method' | 'variable'): { isValid: boolean; error?: string } {
+  static validateIdentifier(
+    identifier: string,
+    type: 'contract' | 'method' | 'variable'
+  ): { isValid: boolean; error?: string } {
     if (!identifier || typeof identifier !== 'string') {
       return { isValid: false, error: `${type} name must be a non-empty string` };
     }
 
     // Remove potential whitespace
     const trimmed = identifier.trim();
-    
+
     if (trimmed.length === 0) {
       return { isValid: false, error: `${type} name cannot be empty` };
     }
@@ -144,9 +154,24 @@ export class SecurityValidator {
 
     // Check for reserved words and dangerous names
     const reservedWords = [
-      'eval', 'exec', 'import', 'open', 'file', 'input', 'raw_input',
-      'compile', '__import__', 'globals', 'locals', 'vars', 'dir',
-      'hasattr', 'getattr', 'setattr', 'delattr', 'callable'
+      'eval',
+      'exec',
+      'import',
+      'open',
+      'file',
+      'input',
+      'raw_input',
+      'compile',
+      '__import__',
+      'globals',
+      'locals',
+      'vars',
+      'dir',
+      'hasattr',
+      'getattr',
+      'setattr',
+      'delattr',
+      'callable'
     ];
 
     if (reservedWords.includes(trimmed.toLowerCase())) {
@@ -159,7 +184,10 @@ export class SecurityValidator {
   /**
    * Sanitize text input to prevent XSS and injection
    */
-  static sanitizeTextInput(input: string, maxLength: number = 10000): { sanitizedText: string; warnings: string[] } {
+  static sanitizeTextInput(
+    input: string,
+    maxLength: number = 10000
+  ): { sanitizedText: string; warnings: string[] } {
     if (!input || typeof input !== 'string') {
       return { sanitizedText: '', warnings: ['Empty or invalid input provided'] };
     }
@@ -180,7 +208,7 @@ export class SecurityValidator {
     const scriptPatterns = [
       /<script/gi,
       /javascript:/gi,
-      /onload=/gi, 
+      /onload=/gi,
       /onerror=/gi,
       /onclick=/gi,
       /onmouseover=/gi
@@ -213,7 +241,11 @@ export class SecurityValidator {
   /**
    * Validate file paths to prevent directory traversal
    */
-  static validateFilePath(filePath: string): { isValid: boolean; sanitizedPath?: string; error?: string } {
+  static validateFilePath(filePath: string): {
+    isValid: boolean;
+    sanitizedPath?: string;
+    error?: string;
+  } {
     if (!filePath || typeof filePath !== 'string') {
       return { isValid: false, error: 'File path must be a non-empty string' };
     }
@@ -237,19 +269,25 @@ export class SecurityValidator {
 
     for (const pattern of dangerousPatterns) {
       if (trimmedPath.includes(pattern)) {
-        return { isValid: false, error: 'File path contains dangerous directory traversal patterns' };
+        return {
+          isValid: false,
+          error: 'File path contains dangerous directory traversal patterns'
+        };
       }
     }
 
     // Only allow relative paths in contracts/ directory
     if (!trimmedPath.startsWith('contracts/') && !trimmedPath.match(/^[a-zA-Z0-9_\-\/\.]+$/)) {
-      return { isValid: false, error: 'File path must be in contracts/ directory with valid characters only' };
+      return {
+        isValid: false,
+        error: 'File path must be in contracts/ directory with valid characters only'
+      };
     }
 
     // Check for valid file extension
     const allowedExtensions = ['.py', '.gl', '.genlayer'];
     const hasValidExtension = allowedExtensions.some(ext => trimmedPath.endsWith(ext));
-    
+
     if (!hasValidExtension) {
       return { isValid: false, error: 'File must have a valid extension (.py, .gl, .genlayer)' };
     }
@@ -260,7 +298,10 @@ export class SecurityValidator {
   /**
    * Comprehensive input validation for tool parameters
    */
-  static validateToolInput(toolName: string, params: any): { isValid: boolean; sanitizedParams?: any; errors: string[]; warnings: string[] } {
+  static validateToolInput(
+    toolName: string,
+    params: any
+  ): { isValid: boolean; sanitizedParams?: any; errors: string[]; warnings: string[] } {
     const errors: string[] = [];
     const warnings: string[] = [];
     const sanitizedParams: any = {};
@@ -283,8 +324,11 @@ export class SecurityValidator {
         sanitizedParams[key] = codeValidation.sanitizedCode;
         warnings.push(...codeValidation.warnings);
       } else if (key.includes('name') && typeof value === 'string') {
-        const nameType = key.includes('contract') ? 'contract' : 
-                         key.includes('method') ? 'method' : 'variable';
+        const nameType = key.includes('contract')
+          ? 'contract'
+          : key.includes('method')
+            ? 'method'
+            : 'variable';
         const nameValidation = this.validateIdentifier(value, nameType);
         if (!nameValidation.isValid) {
           errors.push(`Invalid ${nameType} name in ${key}: ${nameValidation.error}`);

@@ -35,7 +35,9 @@ const client = new GenLayerClient({
   privateKey: process.env.PRIVATE_KEY // or use wallet connection
 });
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Hook for GenLayer
 import { useState, useEffect } from 'react';
 
@@ -64,7 +66,9 @@ export function useGenLayer() {
 
   return { client, isConnected };
 }
-` : ''}
+`
+    : ''
+}
 
 export default client;
 \`\`\`
@@ -93,7 +97,11 @@ const client = new GenLayerClient({
 // Read contract state
 async function readContractData(contractAddress: string) {
   try {
-    ${params.contract_methods?.filter(m => m.type === 'view').map(method => `
+    ${
+      params.contract_methods
+        ?.filter(m => m.type === 'view')
+        .map(
+          method => `
     // Call ${method.name} (view method)
     const ${method.name}Result = await client.readContract({
       address: contractAddress,
@@ -101,14 +109,18 @@ async function readContractData(contractAddress: string) {
       args: [${method.parameters?.map((p: any) => `/* ${p.name}: ${p.type} */`).join(', ') || ''}]
     });
     console.log('${method.name}:', ${method.name}Result);
-    `).join('') || `
+    `
+        )
+        .join('') ||
+      `
     // Example: Get contract info
     const info = await client.readContract({
       address: contractAddress,
       method: 'get_info',
       args: []
     });
-    console.log('Contract Info:', info);`}
+    console.log('Contract Info:', info);`
+    }
     
     return { success: true };
   } catch (error) {
@@ -117,7 +129,9 @@ async function readContractData(contractAddress: string) {
   }
 }
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Component for Contract Reading
 export function ContractReader({ contractAddress }: { contractAddress: string }) {
   const [data, setData] = useState<any>(null);
@@ -153,7 +167,9 @@ export function ContractReader({ contractAddress }: { contractAddress: string })
     </div>
   );
 }
-` : ''}
+`
+    : ''
+}
 \`\`\`
 
 ## Writing to Contracts
@@ -162,7 +178,11 @@ export function ContractReader({ contractAddress }: { contractAddress: string })
 // Write contract transactions
 async function writeContractData(contractAddress: string) {
   try {
-    ${params.contract_methods?.filter(m => m.type === 'write').map(method => `
+    ${
+      params.contract_methods
+        ?.filter(m => m.type === 'write')
+        .map(
+          method => `
     // Call ${method.name} (write method)
     const ${method.name}Tx = await client.writeContract({
       address: contractAddress,
@@ -176,7 +196,10 @@ async function writeContractData(contractAddress: string) {
     // Wait for confirmation
     const ${method.name}Receipt = await ${method.name}Tx.wait();
     console.log('${method.name} confirmed:', ${method.name}Receipt);
-    `).join('') || `
+    `
+        )
+        .join('') ||
+      `
     // Example: Update contract state
     const updateTx = await client.writeContract({
       address: contractAddress,
@@ -187,7 +210,8 @@ async function writeContractData(contractAddress: string) {
     
     console.log('Transaction hash:', updateTx.hash);
     const receipt = await updateTx.wait();
-    console.log('Transaction confirmed:', receipt);`}
+    console.log('Transaction confirmed:', receipt);`
+    }
     
     return { success: true };
   } catch (error) {
@@ -196,7 +220,9 @@ async function writeContractData(contractAddress: string) {
   }
 }
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Component for Contract Writing
 export function ContractWriter({ contractAddress }: { contractAddress: string }) {
   const [loading, setLoading] = useState(false);
@@ -230,14 +256,19 @@ export function ContractWriter({ contractAddress }: { contractAddress: string })
   return (
     <div>
       <h3>Contract Operations</h3>
-      ${params.contract_methods?.filter(m => m.type === 'write').map(method => `
+      ${params.contract_methods
+        ?.filter(m => m.type === 'write')
+        .map(
+          method => `
       <button 
         onClick={() => handleWrite('${method.name}', [/* args */])}
         disabled={loading || !isConnected}
       >
         ${method.name}
       </button>
-      `).join('')}
+      `
+        )
+        .join('')}
       
       {result && (
         <div>
@@ -254,7 +285,9 @@ export function ContractWriter({ contractAddress }: { contractAddress: string })
     </div>
   );
 }
-` : ''}
+`
+    : ''
+}
 \`\`\``,
 
         transaction_monitoring: `# Transaction Monitoring
@@ -319,7 +352,9 @@ class TransactionMonitor {
   }
 }
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Hook for Transaction Monitoring
 export function useTransactionMonitor() {
   const { client } = useGenLayer();
@@ -366,7 +401,9 @@ export function TransactionStatus({ txHash }: { txHash: string }) {
     </div>
   );
 }
-` : ''}
+`
+    : ''
+}
 \`\`\``,
 
         event_subscription: `# Event Subscription
@@ -436,7 +473,9 @@ class EventSubscriber {
   }
 }
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Hook for Event Subscription
 export function useContractEvents(contractAddress: string) {
   const { client } = useGenLayer();
@@ -491,7 +530,9 @@ export function EventLog({ contractAddress }: { contractAddress: string }) {
     </div>
   );
 }
-` : ''}
+`
+    : ''
+}
 \`\`\``,
 
         error_handling: `# Error Handling
@@ -624,7 +665,9 @@ class SafeContractClient {
   }
 }
 
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // React Hook for Safe Contract Operations
 export function useSafeContract() {
   const { client } = useGenLayer();
@@ -690,7 +733,9 @@ export function SafeContractInteraction({ contractAddress }: { contractAddress: 
     </div>
   );
 }
-` : ''}
+`
+    : ''
+}
 \`\`\``,
 
         complete_example: `# Complete GenLayerJS Application Example
@@ -698,7 +743,9 @@ export function SafeContractInteraction({ contractAddress }: { contractAddress: 
 ## Full Application Setup
 
 \`\`\`${params.framework === 'react' ? 'tsx' : 'javascript'}
-${params.framework === 'react' ? `
+${
+  params.framework === 'react'
+    ? `
 // App.tsx
 import React from 'react';
 import { GenLayerProvider } from './contexts/GenLayerContext';
@@ -877,7 +924,8 @@ export function ContractInteraction({ contractAddress }: { contractAddress: stri
     </div>
   );
 }
-` : `
+`
+    : `
 // main.js
 import { GenLayerClient } from '@genlayer/js';
 
@@ -975,12 +1023,15 @@ const app = new GenLayerApp();
 
 // Export for use in HTML
 window.genLayerApp = app;
-`}
+`
+}
 \`\`\`
 
 ## HTML Template (for vanilla JS)
 
-${params.framework !== 'react' ? `\`\`\`html
+${
+  params.framework !== 'react'
+    ? `\`\`\`html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1012,7 +1063,9 @@ ${params.framework !== 'react' ? `\`\`\`html
     <script type="module" src="./main.js"></script>
 </body>
 </html>
-\`\`\`` : ''}
+\`\`\``
+    : ''
+}
 
 ## Package.json Configuration
 
@@ -1026,38 +1079,46 @@ ${params.framework !== 'react' ? `\`\`\`html
     "preview": "vite preview"
   },
   "dependencies": {
-    "@genlayer/js": "latest"${params.framework === 'react' ? `,
+    "@genlayer/js": "latest"${
+      params.framework === 'react'
+        ? `,
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"` : ''}
+    "react-dom": "^18.0.0"`
+        : ''
+    }
   },
-  "devDependencies": {${params.framework === 'react' ? `
+  "devDependencies": {${
+    params.framework === 'react'
+      ? `
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.0"` : `
-    "vite": "^4.0.0"`}
+    "typescript": "^4.9.0"`
+      : `
+    "vite": "^4.0.0"`
+  }
   }
 }
 \`\`\``
       };
 
       const integration = integrations[params.integration_type as keyof typeof integrations];
-      
+
       if (!integration) {
         return {
           content: `Error: Unknown integration type '${params.integration_type}'. Available types: basic_setup, contract_interaction, transaction_monitoring, event_subscription, error_handling, complete_example`,
-          isError: true,
+          isError: true
         };
       }
 
       return {
         content: integration,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error generating GenLayerJS integration: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -1081,7 +1142,7 @@ This will include:
 - Gas optimization
 
 Full implementation coming soon with practical examples for all interaction methods.`,
-      isError: false,
+      isError: false
     };
   }
 
@@ -1104,7 +1165,7 @@ This will include:
 - CI/CD integration
 
 Full implementation coming soon with complete testing solutions.`,
-      isError: false,
+      isError: false
     };
   }
 
@@ -1131,7 +1192,7 @@ This will include:
 - Documentation
 
 Full implementation coming soon with complete project scaffolding.`,
-      isError: false,
+      isError: false
     };
   }
 }

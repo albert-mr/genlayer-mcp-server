@@ -1,6 +1,6 @@
 // Core Contract Generation Tools
-import { GenLayerContractGenerator } from "../../utils/contractGenerator.js";
-import { GENLAYER_URLS, ERROR_MESSAGES, VALIDATION_PATTERNS } from "../../config/constants.js";
+import { GenLayerContractGenerator } from '../../utils/contractGenerator.js';
+import { GENLAYER_URLS, ERROR_MESSAGES, VALIDATION_PATTERNS } from '../../config/constants.js';
 
 export interface ToolResult {
   content: string;
@@ -21,19 +21,20 @@ export class ContractGenerationTools {
       if (!params.contract_name || !VALIDATION_PATTERNS.pascalCase.test(params.contract_name)) {
         return {
           content: `Error: ${ERROR_MESSAGES.contract.nameFormat}. Got: ${params.contract_name}`,
-          isError: true,
+          isError: true
         };
       }
 
       if (!params.requirements || params.requirements.trim().length < 10) {
         return {
-          content: `Error: Requirements must be at least 10 characters long and describe what the contract should do.`,
-          isError: true,
+          content:
+            'Error: Requirements must be at least 10 characters long and describe what the contract should do.',
+          isError: true
         };
       }
 
       let contractCode: string;
-      
+
       // Use template if specified
       if (params.template_type && params.template_type !== 'basic') {
         contractCode = GenLayerContractGenerator.generateAdvancedContractTemplate(
@@ -60,7 +61,7 @@ export class ContractGenerationTools {
         if (params.web_access) {
           contractCode = GenLayerContractGenerator.addWebDataAccess(
             contractCode,
-            "https://api.example.com/data", // Default URL template
+            'https://api.example.com/data', // Default URL template
             params.requirements
           );
         }
@@ -95,12 +96,12 @@ ${contractCode}
 2. Customize the business logic as needed
 3. Test on GenLayer Studio: ${GENLAYER_URLS.studio}
 `,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error generating contract: ${(error as Error).message}\n\nPlease check your parameters and try again.`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -115,7 +116,7 @@ ${contractCode}
       if (!params.contract_name || !VALIDATION_PATTERNS.pascalCase.test(params.contract_name)) {
         return {
           content: `Error: ${ERROR_MESSAGES.contract.nameFormat}. Got: ${params.contract_name}`,
-          isError: true,
+          isError: true
         };
       }
 
@@ -144,12 +145,12 @@ ${contractCode}
 
 ## Template-Specific Notes
 ${this.getTemplateNotes(params.template_type)}`,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error generating template: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -166,15 +167,17 @@ ${this.getTemplateNotes(params.template_type)}`,
       // Enhanced validation
       if (!params.market_name.match(/^[A-Z][a-zA-Z0-9]*Market$/)) {
         return {
-          content: `Error: Market name should be in PascalCase and end with 'Market'. Example: BitcoinPriceMarket`,
-          isError: true,
+          content:
+            "Error: Market name should be in PascalCase and end with 'Market'. Example: BitcoinPriceMarket",
+          isError: true
         };
       }
 
       if (!params.resolution_criteria || params.resolution_criteria.length < 20) {
         return {
-          content: `Error: Resolution criteria must be specific and detailed (at least 20 characters).`,
-          isError: true,
+          content:
+            'Error: Resolution criteria must be specific and detailed (at least 20 characters).',
+          isError: true
         };
       }
 
@@ -217,12 +220,12 @@ ${marketCode}
 2. Test with small amounts on testnet
 3. Configure reliable web sources
 `,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error creating prediction market: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -268,12 +271,12 @@ ${vectorStoreCode}
 2. Test with sample data
 3. Integrate with your application
 4. Scale as needed`,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error creating vector store: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -281,7 +284,7 @@ ${vectorStoreCode}
   static async addEquivalencePrinciple(params: {
     contract_code: string;
     method_name: string;
-    validation_type: "comparative" | "non_comparative";
+    validation_type: 'comparative' | 'non_comparative';
     tolerance?: number;
   }): Promise<ToolResult> {
     try {
@@ -316,12 +319,12 @@ ${updatedCode}
 2. Test the consensus behavior
 3. Adjust tolerance if needed
 `,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error adding equivalence principle: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -362,33 +365,43 @@ ${updatedCode}
 2. Verify data processing logic
 3. Monitor validator consensus on web data
 `,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error adding web data access: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
 
   private static getTemplateFeatures(templateType: string): string {
     const features = {
-      dao_governance: "• AI-powered proposal analysis\n• Voting mechanisms\n• Member management\n• Treasury operations",
-      content_moderation: "• AI content analysis\n• Violation detection\n• Severity scoring\n• Appeal system",
-      sentiment_tracker: "• Real-time sentiment analysis\n• Historical tracking\n• Trend analysis\n• Alert system",
-      multi_oracle: "• Multi-source data aggregation\n• Consensus mechanisms\n• Data validation\n• Reliability scoring"
+      dao_governance:
+        '• AI-powered proposal analysis\n• Voting mechanisms\n• Member management\n• Treasury operations',
+      content_moderation:
+        '• AI content analysis\n• Violation detection\n• Severity scoring\n• Appeal system',
+      sentiment_tracker:
+        '• Real-time sentiment analysis\n• Historical tracking\n• Trend analysis\n• Alert system',
+      multi_oracle:
+        '• Multi-source data aggregation\n• Consensus mechanisms\n• Data validation\n• Reliability scoring'
     };
-    return features[templateType as keyof typeof features] || "• Advanced smart contract features";
+    return features[templateType as keyof typeof features] || '• Advanced smart contract features';
   }
 
   private static getTemplateNotes(templateType: string): string {
     const notes = {
-      dao_governance: "Configure voting thresholds and member requirements according to your DAO structure.",
-      content_moderation: "Adjust moderation strictness based on your community guidelines and tolerance levels.",
-      sentiment_tracker: "Define relevant categories and topics for your specific use case and audience.",
-      multi_oracle: "Set up reliable data sources and configure consensus parameters for accuracy."
+      dao_governance:
+        'Configure voting thresholds and member requirements according to your DAO structure.',
+      content_moderation:
+        'Adjust moderation strictness based on your community guidelines and tolerance levels.',
+      sentiment_tracker:
+        'Define relevant categories and topics for your specific use case and audience.',
+      multi_oracle: 'Set up reliable data sources and configure consensus parameters for accuracy.'
     };
-    return notes[templateType as keyof typeof notes] || "Customize the template according to your specific requirements.";
+    return (
+      notes[templateType as keyof typeof notes] ||
+      'Customize the template according to your specific requirements.'
+    );
   }
 }

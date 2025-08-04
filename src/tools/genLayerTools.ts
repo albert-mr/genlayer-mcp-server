@@ -1,11 +1,11 @@
 // GenLayer MCP Tools Implementation
 
-import { GenLayerContractGenerator } from "../utils/contractGenerator.js";
-import { ContractGenerationTools } from "./modules/contractGeneration.js";
-import { TypesAndStorageTools } from "./modules/typesAndStorage.js";
-import { DeploymentAndDebuggingTools } from "./modules/deploymentAndDebugging.js";
-import { InteractionAndIntegrationTools } from "./modules/interactionAndIntegration.js";
-import { ConceptsExplanationTools } from "./modules/conceptsExplanation.js";
+import { GenLayerContractGenerator } from '../utils/contractGenerator.js';
+import { ContractGenerationTools } from './modules/contractGeneration.js';
+import { TypesAndStorageTools } from './modules/typesAndStorage.js';
+import { DeploymentAndDebuggingTools } from './modules/deploymentAndDebugging.js';
+import { InteractionAndIntegrationTools } from './modules/interactionAndIntegration.js';
+import { ConceptsExplanationTools } from './modules/conceptsExplanation.js';
 
 export interface ToolResult {
   content: string;
@@ -27,7 +27,7 @@ export class GenLayerTools {
   static async addEquivalencePrinciple(params: {
     contract_code: string;
     method_name: string;
-    validation_type: "comparative" | "non_comparative";
+    validation_type: 'comparative' | 'non_comparative';
     tolerance?: number;
   }): Promise<ToolResult> {
     return ContractGenerationTools.addEquivalencePrinciple(params);

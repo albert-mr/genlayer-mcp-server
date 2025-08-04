@@ -33,25 +33,25 @@ export const DEFAULT_VALUES = {
   rpcUrl: GENLAYER_NETWORKS.localnet.rpcUrl,
   chainId: GENLAYER_NETWORKS.localnet.chainId,
   networkName: 'localnet',
-  
+
   // Gas and transaction defaults
   gasLimit: 1000000,
   confirmationTimeout: 60000, // 60 seconds
-  
+
   // Contract generation defaults
   templateType: 'basic',
   includeExamples: true,
   detailLevel: 'intermediate',
-  
+
   // Validation defaults
   minRequirementsLength: 10,
   minDescriptionLength: 10,
   minCriteriaLength: 20,
-  
+
   // Performance defaults
   cacheTimeout: 300000, // 5 minutes
   maxConcurrentRequests: 10,
-  requestTimeout: 30000, // 30 seconds
+  requestTimeout: 30000 // 30 seconds
 } as const;
 
 export const GENLAYER_TYPES = {
@@ -64,13 +64,13 @@ export const GENLAYER_TYPES = {
     float: 'float',
     bytes: 'bytes'
   },
-  
+
   // Collection types
   collections: {
     list: 'DynArray',
     dict: 'TreeMap'
   },
-  
+
   // Special GenLayer types
   special: {
     vector_store: 'VecDB',
@@ -86,20 +86,20 @@ export const EXAMPLE_APIS = {
     coingecko: 'https://api.coingecko.com/api/v3/simple/price',
     alphavantage: 'https://www.alphavantage.co/query'
   },
-  
+
   weather: {
     openweather: 'https://api.openweathermap.org/data/2.5/weather'
   },
-  
+
   news: {
     newsapi: 'https://newsapi.org/v2/everything',
     reddit: 'https://api.reddit.com/r/news/search'
   },
-  
+
   social: {
     twitter: 'https://api.twitter.com/2/tweets/search/recent'
   },
-  
+
   // Generic placeholder for examples
   generic: 'https://api.example.com/data'
 } as const;
@@ -111,10 +111,11 @@ export const VALIDATION_PATTERNS = {
   kebabCase: /^[a-z][a-z0-9-]*$/,
   marketName: /^[A-Z][a-zA-Z0-9]*Market$/,
   methodName: /^[a-z][a-zA-Z0-9_]*$/,
-  
+
   // URL validation
   httpUrl: /^https?:\/\/.+/,
-  validUrl: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/
+  validUrl:
+    /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/
 } as const;
 
 export const ERROR_MESSAGES = {
@@ -124,18 +125,22 @@ export const ERROR_MESSAGES = {
     required: 'This field is required',
     minLength: (field: string, min: number) => `${field} must be at least ${min} characters long`,
     invalidUrl: 'Must be a valid HTTP or HTTPS URL',
-    invalidEnum: (field: string, options: string[]) => `${field} must be one of: ${options.join(', ')}`
+    invalidEnum: (field: string, options: string[]) =>
+      `${field} must be one of: ${options.join(', ')}`
   },
-  
+
   contract: {
     nameFormat: 'Contract name must be in PascalCase and start with a capital letter',
-    marketNameFormat: 'Market name must be in PascalCase and end with "Market" (e.g., BitcoinPriceMarket)',
-    requirementsTooShort: 'Requirements must be at least 10 characters and describe what the contract should do',
+    marketNameFormat:
+      'Market name must be in PascalCase and end with "Market" (e.g., BitcoinPriceMarket)',
+    requirementsTooShort:
+      'Requirements must be at least 10 characters and describe what the contract should do',
     criteriaTooShort: 'Resolution criteria must be specific and detailed (at least 20 characters)'
   },
-  
+
   network: {
-    connectionFailed: 'Unable to connect to GenLayer network. Check your RPC URL and network settings.',
+    connectionFailed:
+      'Unable to connect to GenLayer network. Check your RPC URL and network settings.',
     invalidChainId: 'Invalid chain ID. Must match the target network.',
     gasEstimationFailed: 'Gas estimation failed. Check contract parameters and network status.'
   }
@@ -165,7 +170,7 @@ export const LIMITS = {
 // Environment-specific overrides
 export function getEnvironmentConfig() {
   const env = process.env.NODE_ENV || 'development';
-  
+
   const configs = {
     development: {
       logLevel: 'debug',
@@ -183,6 +188,6 @@ export function getEnvironmentConfig() {
       requestTimeout: 10000
     }
   };
-  
+
   return configs[env as keyof typeof configs] || configs.development;
 }

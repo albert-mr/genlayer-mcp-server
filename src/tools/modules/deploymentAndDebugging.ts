@@ -45,12 +45,19 @@ async function deployContract() {
     console.log('📡 Network: ${params.network_target || 'localnet'}');
     
     // Contract constructor arguments
-    const args = [${params.constructor_args?.map(arg => 
-      arg.type === 'string' ? `"${arg.value}"` : 
-      arg.type.includes('u') || arg.type === 'number' ? arg.value :
-      arg.type === 'boolean' ? arg.value.toLowerCase() :
-      `"${arg.value}"`
-    ).join(', ') || ''}];
+    const args = [${
+      params.constructor_args
+        ?.map(arg =>
+          arg.type === 'string'
+            ? `"${arg.value}"`
+            : arg.type.includes('u') || arg.type === 'number'
+              ? arg.value
+              : arg.type === 'boolean'
+                ? arg.value.toLowerCase()
+                : `"${arg.value}"`
+        )
+        .join(', ') || ''
+    }];
     
     console.log('📝 Constructor args:', args);
     
@@ -66,12 +73,16 @@ async function deployContract() {
     console.log('📄 Contract Address:', deploymentResult.contractAddress);
     console.log('🔗 Transaction Hash:', deploymentResult.transactionHash);
     
-    ${params.deployment_options?.verify_deployment !== false ? `
+    ${
+      params.deployment_options?.verify_deployment !== false
+        ? `
     // Verify deployment
     console.log('🔍 Verifying deployment...');
     const contractInfo = await client.getContract(deploymentResult.contractAddress);
     console.log('✅ Contract verified:', contractInfo);
-    ` : ''}
+    `
+        : ''
+    }
     
     return deploymentResult;
     
@@ -126,12 +137,22 @@ async def deploy_contract():
     
     try:
         # Constructor arguments
-        args = [${params.constructor_args?.map(arg => {
-          if (arg.type === 'string') return `"${arg.value}"`;
-          if (arg.type.includes('u') || arg.type === 'number') return arg.value;
-          if (arg.type === 'boolean') return arg.value.toLowerCase();
-          return `"${arg.value}"`;
-        }).join(', ') || ''}]
+        args = [${
+          params.constructor_args
+            ?.map(arg => {
+              if (arg.type === 'string') {
+                return `"${arg.value}"`;
+              }
+              if (arg.type.includes('u') || arg.type === 'number') {
+                return arg.value;
+              }
+              if (arg.type === 'boolean') {
+                return arg.value.toLowerCase();
+              }
+              return `"${arg.value}"`;
+            })
+            .join(', ') || ''
+        }]
         
         print(f"📝 Constructor args: {args}")
         
@@ -152,12 +173,16 @@ async def deploy_contract():
         print(f"📄 Contract Address: {deployment_result['contract_address']}")
         print(f"🔗 Transaction Hash: {deployment_result['transaction_hash']}")
         
-        ${params.deployment_options?.verify_deployment !== false ? `
+        ${
+          params.deployment_options?.verify_deployment !== false
+            ? `
         # Verify deployment
         print("🔍 Verifying deployment...")
         contract_info = await client.get_contract(deployment_result['contract_address'])
         print(f"✅ Contract verified: {contract_info}")
-        ` : ''}
+        `
+            : ''
+        }
         
         return deployment_result
         
@@ -179,8 +204,12 @@ genlayer deploy --contract ${params.contract_path}${params.constructor_args?.len
 # Deploy to specific network
 genlayer deploy \\
   --contract ${params.contract_path} \\
-  --network ${params.network_target || 'localnet'}${params.constructor_args?.length ? ` \\
-  --args ${params.constructor_args.map(arg => `"${arg.value}"`).join(' \\\n         ')}` : ''}
+  --network ${params.network_target || 'localnet'}${
+    params.constructor_args?.length
+      ? ` \\
+  --args ${params.constructor_args.map(arg => `"${arg.value}"`).join(' \\\n         ')}`
+      : ''
+  }
 \`\`\`
 
 ## Advanced Options
@@ -188,8 +217,12 @@ genlayer deploy \\
 # Deploy with custom gas limit and verification
 genlayer deploy \\
   --contract ${params.contract_path} \\
-  --network ${params.network_target || 'localnet'} \\${params.constructor_args?.length ? `
-  --args ${params.constructor_args.map(arg => `"${arg.value}"`).join(' \\\n         ')} \\` : ''}
+  --network ${params.network_target || 'localnet'} \\${
+    params.constructor_args?.length
+      ? `
+  --args ${params.constructor_args.map(arg => `"${arg.value}"`).join(' \\\n         ')} \\`
+      : ''
+  }
   --gas-limit ${params.deployment_options?.gas_limit || 1000000} \\
   ${params.deployment_options?.wait_for_confirmation !== false ? '--wait-for-confirmation \\' : ''}
   ${params.deployment_options?.verify_deployment !== false ? '--verify-deployment' : '--no-verify'}
@@ -256,13 +289,23 @@ genlayer contract call <contract_address> <method_name> [args...]
   },
   "contracts": {
     "${params.contract_path}": {
-      "constructorArgs": [${params.constructor_args?.map(arg => `
+      "constructorArgs": [${
+        params.constructor_args
+          ?.map(
+            arg => `
         {
           "name": "${arg.name}",
           "type": "${arg.type}",
-          "value": "${arg.value}"${arg.description ? `,
-          "description": "${arg.description}"` : ''}
-        }`).join(',') || ''}
+          "value": "${arg.value}"${
+            arg.description
+              ? `,
+          "description": "${arg.description}"`
+              : ''
+          }
+        }`
+          )
+          .join(',') || ''
+      }
       ],
       "deploymentOptions": {
         "gasLimit": ${params.deployment_options?.gas_limit || 1000000},
@@ -340,11 +383,11 @@ jobs:
       };
 
       const script = scripts[params.script_type as keyof typeof scripts];
-      
+
       if (!script) {
         return {
           content: `Error: Unknown script type '${params.script_type}'. Available types: typescript, python, cli_command, deploy_config`,
-          isError: true,
+          isError: true
         };
       }
 
@@ -368,12 +411,12 @@ ${params.constructor_args?.map(arg => `- **${arg.name}** (${arg.type}): ${arg.va
 3. Test on localnet first
 4. Deploy to testnet for validation
 5. Deploy to mainnet when ready`,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error generating deployment script: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
@@ -392,7 +435,9 @@ ${params.constructor_args?.map(arg => `- **${arg.name}** (${arg.type}): ${arg.va
 ### 1. Static Analysis
 Check for common issues before deployment:
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 # Common issues to check:
 class MyContract(gl.Contract):
     # ❌ Missing type annotation
@@ -408,12 +453,16 @@ class MyContract(gl.Contract):
         # ✅ Proper initialization
         self.balance = u256(1000)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Print Debugging
 Use print statements for debugging (removed in production):
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.write
 def transfer(self, to: Address, amount: u256):
     sender_balance = self.balances.get(gl.message.sender_address, u256(0))
@@ -432,12 +481,16 @@ def transfer(self, to: Address, amount: u256):
     
     print(f"✅ Transfer completed")
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. State Validation
 Add validation methods to check contract state:
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.view
 def validate_state(self) -> str:
     issues = []
@@ -454,7 +507,9 @@ def validate_state(self) -> str:
     
     return "State valid" if not issues else "; ".join(issues)
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         transaction_debugging: `# Transaction Debugging
 
@@ -462,7 +517,9 @@ def validate_state(self) -> str:
 
 ### 1. Common Transaction Errors
 
-${params.include_troubleshooting ? `
+${
+  params.include_troubleshooting
+    ? `
 **Error**: "Insufficient gas"
 **Solution**: Increase gas limit in deployment/transaction
 
@@ -474,11 +531,15 @@ ${params.include_troubleshooting ? `
 
 **Error**: "Type conversion failed"
 **Solution**: Verify parameter types match contract expectations
-` : ''}
+`
+    : ''
+}
 
 ### 2. Transaction Tracing
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.write  
 def traced_function(self, param: u256):
     print(f"Function called with param: {param}")
@@ -492,11 +553,15 @@ def traced_function(self, param: u256):
     
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Error Handling Patterns
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.write
 def safe_operation(self, value: u256):
     try:
@@ -519,7 +584,9 @@ def safe_operation(self, value: u256):
         print(f"Unexpected error: {e}")
         raise Exception("Operation failed")
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         consensus_debugging: `# Consensus Debugging
 
@@ -527,7 +594,9 @@ def safe_operation(self, value: u256):
 
 ### 1. Equivalence Principle Issues
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.write
 def llm_with_debug(self, query: str) -> str:
     def llm_task() -> str:
@@ -542,11 +611,15 @@ def llm_with_debug(self, query: str) -> str:
     
     return consensus_result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Validator Disagreement
 
-${params.include_troubleshooting ? `
+${
+  params.include_troubleshooting
+    ? `
 **Issue**: Validators producing different results
 **Debug Steps**:
 1. Check if LLM prompt is deterministic enough
@@ -560,11 +633,15 @@ ${params.include_troubleshooting ? `
 2. Check network connectivity to external services
 3. Implement fallback mechanisms
 4. Monitor validator performance
-` : ''}
+`
+    : ''
+}
 
 ### 3. Web Data Debugging
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 @gl.public.write
 def debug_web_fetch(self, url: str) -> str:
     def web_task() -> str:
@@ -587,7 +664,9 @@ def debug_web_fetch(self, url: str) -> str:
     result = gl.eq_principle_strict_eq(web_task)
     return result
 \`\`\`
-` : ''}`,
+`
+    : ''
+}`,
 
         studio_debugging: `# GenLayer Studio Debugging
 
@@ -600,7 +679,9 @@ def debug_web_fetch(self, url: str) -> str:
 - **Network Simulation**: Test with multiple validators
 
 ### 2. Debug Panel Usage
-${params.include_code_examples ? `
+${
+  params.include_code_examples
+    ? `
 **Step 1**: Deploy your contract in Studio
 **Step 2**: Execute transactions and monitor logs
 **Step 3**: Check the debug panel for:
@@ -608,11 +689,15 @@ ${params.include_code_examples ? `
 - Gas usage
 - State changes
 - Error messages
-` : ''}
+`
+    : ''
+}
 
 ### 3. Common Studio Workflows
 
-${params.include_troubleshooting ? `
+${
+  params.include_troubleshooting
+    ? `
 **Workflow 1**: Contract Development
 1. Write contract with debug prints
 2. Deploy to Studio
@@ -633,7 +718,9 @@ ${params.include_troubleshooting ? `
 3. Monitor gas usage
 4. Optimize high-cost operations
 5. Test optimizations
-` : ''}`,
+`
+    : ''
+}`,
 
         cli_debugging: `# CLI Debugging Tools
 
@@ -675,7 +762,9 @@ genlayer network validators
 genlayer network ping
 \`\`\`
 
-${params.include_troubleshooting ? `
+${
+  params.include_troubleshooting
+    ? `
 ### Common CLI Issues:
 
 **Issue**: "Contract not found"
@@ -686,7 +775,9 @@ ${params.include_troubleshooting ? `
 
 **Issue**: "Invalid private key"
 **Solution**: Check private key format and permissions
-` : ''}`,
+`
+    : ''
+}`,
 
         testing_strategies: `# Testing Strategies for GenLayer Contracts
 
@@ -695,7 +786,9 @@ ${params.include_troubleshooting ? `
 ### 1. Unit Testing
 Test individual contract methods in isolation:
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 # test_contract.py
 import pytest
 from genlayer import GenLayerClient
@@ -726,12 +819,16 @@ async def test_access_control(contract):
     with pytest.raises(Exception, match="Not authorized"):
         await contract.set_value(u256(100), account=other_account)
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Integration Testing
 Test contract interactions with external systems:
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 async def test_llm_integration(contract):
     # Test LLM functionality
     query = "What is 2+2?"
@@ -750,12 +847,16 @@ async def test_web_data_access(contract):
     assert result.status == "success"
     assert len(result.data) > 0
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Consensus Testing
 Test non-deterministic operations:
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 async def test_consensus_behavior(contract):
     # Test that consensus is reached
     results = []
@@ -778,11 +879,15 @@ async def test_validator_agreement(contract):
     
     assert result1 == result2
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 4. Performance Testing
 
-${params.include_code_examples ? `\`\`\`python
+${
+  params.include_code_examples
+    ? `\`\`\`python
 async def test_gas_usage(contract):
     # Test gas consumption
     initial_gas = await contract.estimate_gas("expensive_operation", [])
@@ -804,26 +909,28 @@ async def test_scalability(contract):
     # Verify reasonable execution time
     assert end_time - start_time < 30  # 30 seconds max
 \`\`\`
-` : ''}`
+`
+    : ''
+}`
       };
 
       const guide = debugGuides[params.debug_topic as keyof typeof debugGuides];
-      
+
       if (!guide) {
         return {
           content: `Error: Unknown debug topic '${params.debug_topic}'. Available topics: contract_debugging, transaction_debugging, consensus_debugging, studio_debugging, cli_debugging, testing_strategies`,
-          isError: true,
+          isError: true
         };
       }
 
       return {
         content: guide,
-        isError: false,
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error generating debugging guide: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }

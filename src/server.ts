@@ -1,5 +1,5 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { registerGenLayerTools } from "./tools/toolRegistry.js";
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { registerGenLayerTools } from './tools/toolRegistry.js';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -12,17 +12,17 @@ const version = packageJson.version;
 export function createServer(): Server {
   const server = new Server(
     {
-      name: "genlayer-mcp-server",
-      version,
+      name: 'genlayer-mcp-server',
+      version
     },
     {
       capabilities: {
-        tools: {},
-      },
+        tools: {}
+      }
     }
   );
 
   registerGenLayerTools(server);
-  
+
   return server;
 }

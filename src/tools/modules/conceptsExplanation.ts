@@ -23,7 +23,9 @@ The Equivalence Principle is GenLayer's consensus mechanism for handling non-det
 ### 1. Strict Equality (gl.eq_principle_strict_eq)
 Used when results must be identical across all validators.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def process_deterministic_data(self, input_data: str) -> str:
     def deterministic_task() -> str:
@@ -35,12 +37,16 @@ def process_deterministic_data(self, input_data: str) -> str:
     consensus_result = gl.eq_principle_strict_eq(deterministic_task)
     return consensus_result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Comparative Validation (gl.eq_principle_prompt_comparative)
 Used for numerical results where small variations are acceptable.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def calculate_market_price(self, symbol: str) -> str:
     def price_task() -> str:
@@ -56,12 +62,16 @@ def calculate_market_price(self, symbol: str) -> str:
     )
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Non-Comparative Validation (gl.eq_principle_prompt_non_comparative)
 Used for subjective decisions where exact matches aren't expected.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def analyze_sentiment(self, text: str) -> str:
     def sentiment_task() -> str:
@@ -76,7 +86,9 @@ def analyze_sentiment(self, text: str) -> str:
     )
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Best Practices
 
@@ -128,7 +140,9 @@ Optimistic Democracy is GenLayer's enhanced Delegated Proof of Stake (dPoS) cons
 - Challenged results are resolved through voting
 - Finalized state is committed to blockchain
 
-${params.include_examples ? `
+${
+  params.include_examples
+    ? `
 ### Example Consensus Flow:
 
 \`\`\`python
@@ -146,7 +160,9 @@ def ai_decision(self, input_data: str) -> str:
     # Result is only finalized if validators reach consensus
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Benefits
 
@@ -188,7 +204,9 @@ GenLayer enables smart contracts to directly interact with Large Language Models
 ### 1. gl.exec_prompt()
 Execute LLM prompts within smart contracts.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def ask_ai(self, question: str) -> str:
     # Direct LLM interaction
@@ -208,12 +226,16 @@ def analyze_content(self, content: str) -> str:
     result = gl.exec_prompt(prompt)
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Structured Prompts
 Design prompts for consistent, parseable outputs.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def classify_text(self, text: str) -> str:
     def classification_task() -> str:
@@ -230,12 +252,16 @@ def classify_text(self, text: str) -> str:
     category = gl.eq_principle_strict_eq(classification_task)
     return category
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Context Management
 Manage conversation context and memory.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class ChatContract(gl.Contract):
     conversations: TreeMap[Address, DynArray[str]]
     
@@ -272,14 +298,18 @@ class ChatContract(gl.Contract):
         
         return ai_response
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Advanced LLM Patterns
 
 ### 1. Multi-Step Reasoning
 Break complex tasks into steps.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def complex_analysis(self, data: str) -> str:
     def step1_task() -> str:
@@ -298,12 +328,16 @@ def complex_analysis(self, data: str) -> str:
     
     return recommendations
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Validation and Quality Control
 Validate LLM outputs for quality and safety.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def safe_content_generation(self, topic: str) -> str:
     def generation_task() -> str:
@@ -334,7 +368,9 @@ def safe_content_generation(self, topic: str) -> str:
     else:
         raise Exception(f"Content validation failed: {validation}")
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Best Practices
 
@@ -361,7 +397,9 @@ GenLayer smart contracts can directly access web APIs and fetch real-time data w
 ### 1. gl.nondet.web.render()
 Fetch web content directly in contracts.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def fetch_price_data(self, symbol: str) -> str:
     def web_task() -> str:
@@ -382,12 +420,16 @@ def fetch_price_data(self, symbol: str) -> str:
     result = gl.eq_principle_strict_eq(web_task)
     return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Data Processing
 Process and validate fetched web data.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def get_weather_report(self, city: str) -> str:
     def weather_task() -> str:
@@ -408,12 +450,16 @@ def get_weather_report(self, city: str) -> str:
     weather_info = gl.eq_principle_strict_eq(weather_task)
     return weather_info
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Multi-Source Validation
 Validate data across multiple sources.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def verified_news_summary(self, topic: str) -> str:
     def news_task() -> str:
@@ -451,14 +497,18 @@ def verified_news_summary(self, topic: str) -> str:
     verified_summary = gl.eq_principle_strict_eq(news_task)
     return verified_summary
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Advanced Web Access Patterns
 
 ### 1. Real-Time Monitoring
 Monitor web endpoints for changes.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class WebMonitor(gl.Contract):
     last_hashes: TreeMap[str, str]
     alerts: DynArray[str]
@@ -482,12 +532,16 @@ class WebMonitor(gl.Contract):
         result = gl.eq_principle_strict_eq(monitor_task)
         return result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. API Integration
 Integrate with external APIs securely.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def social_sentiment_analysis(self, hashtag: str) -> str:
     def sentiment_task() -> str:
@@ -516,7 +570,9 @@ def social_sentiment_analysis(self, hashtag: str) -> str:
     sentiment_result = gl.eq_principle_strict_eq(sentiment_task)
     return sentiment_result
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Security Considerations
 
@@ -551,7 +607,9 @@ GenLayer's vector stores enable semantic search and similarity matching directly
 ### 1. Text Embedding
 Automatically generate embeddings for text data.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class DocumentStore(gl.Contract):
     vector_store: VectorStore
     
@@ -578,12 +636,16 @@ class DocumentStore(gl.Contract):
         results = self.vector_store.search(query, top_k)
         return results
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Similarity Matching
 Find similar content based on semantic meaning.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def find_similar_content(self, reference_text: str, threshold: float = 0.8) -> list:
     # Find content similar to reference
@@ -597,12 +659,16 @@ def find_similar_content(self, reference_text: str, threshold: float = 0.8) -> l
     
     return filtered_results
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Content Classification
 Classify content based on existing categories.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def classify_content(self, new_content: str) -> str:
     # Search for similar content in each category
@@ -626,14 +692,18 @@ def classify_content(self, new_content: str) -> str:
     best_category = max(category_scores, key=category_scores.get)
     return best_category
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Advanced Vector Operations
 
 ### 1. Clustered Storage
 Organize content into semantic clusters.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def create_content_clusters(self, num_clusters: int = 5) -> list:
     # Get all stored vectors
@@ -661,12 +731,16 @@ def create_content_clusters(self, num_clusters: int = 5) -> list:
     cluster_info = gl.eq_principle_strict_eq(clustering_task)
     return cluster_info
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Content Recommendation
 Recommend content based on user preferences.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class RecommendationEngine(gl.Contract):
     user_interactions: TreeMap[Address, DynArray[str]]
     content_store: VectorStore
@@ -704,7 +778,9 @@ class RecommendationEngine(gl.Contract):
         unique_recs = list({rec["id"]: rec for rec in recommendations}.values())
         return unique_recs[:count]
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Performance Optimization
 
@@ -736,7 +812,9 @@ Intelligent Contracts are GenLayer's enhanced smart contracts that combine tradi
 ### 1. AI Integration
 Native access to Large Language Models for intelligent decision-making.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class IntelligentOracle(gl.Contract):
     predictions: TreeMap[str, str]
     
@@ -761,12 +839,16 @@ class IntelligentOracle(gl.Contract):
         
         return prediction
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 2. Web Data Access
 Direct access to external APIs and web services.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 @gl.public.write
 def analyze_market_sentiment(self, symbol: str) -> str:
     def analysis_task() -> str:
@@ -792,12 +874,16 @@ def analyze_market_sentiment(self, symbol: str) -> str:
     sentiment = gl.eq_principle_strict_eq(analysis_task)
     return sentiment
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ### 3. Dynamic Behavior
 Contracts that adapt and evolve based on external conditions.
 
-${params.include_examples ? `\`\`\`python
+${
+  params.include_examples
+    ? `\`\`\`python
 class AdaptiveGovernance(gl.Contract):
     governance_rules: TreeMap[str, str]
     adaptation_threshold: u256
@@ -830,7 +916,9 @@ class AdaptiveGovernance(gl.Contract):
         
         return decision
 \`\`\`
-` : ''}
+`
+    : ''
+}
 
 ## Architecture Patterns
 
@@ -1008,39 +1096,49 @@ Regularly update and optimize contracts.`
       };
 
       const explanation = concepts[params.concept as keyof typeof concepts];
-      
+
       if (!explanation) {
         return {
           content: `Error: Unknown concept '${params.concept}'. Available concepts: ${Object.keys(concepts).join(', ')}`,
-          isError: true,
+          isError: true
         };
       }
 
       return {
-        content: explanation + (params.detail_level === 'advanced' ? this.getRelatedTopics(params.concept) : ''),
-        isError: false,
+        content:
+          explanation +
+          (params.detail_level === 'advanced' ? this.getRelatedTopics(params.concept) : ''),
+        isError: false
       };
     } catch (error) {
       return {
         content: `Error explaining GenLayer concept: ${(error as Error).message}`,
-        isError: true,
+        isError: true
       };
     }
   }
 
   private static getRelatedTopics(concept: string): string {
     const related = {
-      equivalence_principle: "\n\n## Related Topics\n• Optimistic Democracy\n• Consensus Mechanisms\n• LLM Integration",
-      optimistic_democracy: "\n\n## Related Topics\n• Equivalence Principle\n• Validator Networks\n• Consensus Algorithms",
-      llm_integration: "\n\n## Related Topics\n• Equivalence Principle\n• Intelligent Contracts\n• GenLayer Types",
-      web_data_access: "\n\n## Related Topics\n• LLM Integration\n• Intelligent Contracts\n• GenLayer Types",
-      vector_stores: "\n\n## Related Topics\n• LLM Integration\n• Intelligent Contracts\n• GenLayer Types",
-      intelligent_contracts: "\n\n## Related Topics\n• LLM Integration\n• Web Data Access\n• GenVM",
-      genvm: "\n\n## Related Topics\n• Intelligent Contracts\n• GenLayer Types\n• Best Practices",
-      genlayer_types: "\n\n## Related Topics\n• GenVM\n• Best Practices\n• Intelligent Contracts",
-      best_practices: "\n\n## Related Topics\n• Security\n• LLM Integration\n• GenLayer Types"
+      equivalence_principle:
+        '\n\n## Related Topics\n• Optimistic Democracy\n• Consensus Mechanisms\n• LLM Integration',
+      optimistic_democracy:
+        '\n\n## Related Topics\n• Equivalence Principle\n• Validator Networks\n• Consensus Algorithms',
+      llm_integration:
+        '\n\n## Related Topics\n• Equivalence Principle\n• Intelligent Contracts\n• GenLayer Types',
+      web_data_access:
+        '\n\n## Related Topics\n• LLM Integration\n• Intelligent Contracts\n• GenLayer Types',
+      vector_stores:
+        '\n\n## Related Topics\n• LLM Integration\n• Intelligent Contracts\n• GenLayer Types',
+      intelligent_contracts: '\n\n## Related Topics\n• LLM Integration\n• Web Data Access\n• GenVM',
+      genvm: '\n\n## Related Topics\n• Intelligent Contracts\n• GenLayer Types\n• Best Practices',
+      genlayer_types: '\n\n## Related Topics\n• GenVM\n• Best Practices\n• Intelligent Contracts',
+      best_practices: '\n\n## Related Topics\n• Security\n• LLM Integration\n• GenLayer Types'
     };
-    
-    return related[concept as keyof typeof related] || "\n\n## Related Topics\n• Check GenLayer documentation for more concepts";
+
+    return (
+      related[concept as keyof typeof related] ||
+      '\n\n## Related Topics\n• Check GenLayer documentation for more concepts'
+    );
   }
 }

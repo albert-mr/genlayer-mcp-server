@@ -21,12 +21,17 @@ describe('GenLayerContractGenerator', () => {
         { name: 'active', type: 'boolean', description: 'Is active' }
       ];
 
-      const contractCode = GenLayerContractGenerator.generateBaseContract('StorageContract', fields);
+      const contractCode = GenLayerContractGenerator.generateBaseContract(
+        'StorageContract',
+        fields
+      );
 
       expect(contractCode).toContain('title: str # Contract title');
       expect(contractCode).toContain('count: u256 # Item count');
       expect(contractCode).toContain('active: bool # Is active');
-      expect(contractCode).toContain('def __init__(self, title: str = "", count: u256 = u256(0), active: bool = False):');
+      expect(contractCode).toContain(
+        'def __init__(self, title: str = "", count: u256 = u256(0), active: bool = False):'
+      );
       expect(contractCode).toContain('self.title = title');
       expect(contractCode).toContain('self.count = count');
       expect(contractCode).toContain('self.active = active');
@@ -45,7 +50,10 @@ describe('GenLayerContractGenerator', () => {
         { name: 'mapping', type: 'dict' }
       ];
 
-      const contractCode = GenLayerContractGenerator.generateBaseContract('TypeMappingContract', fields);
+      const contractCode = GenLayerContractGenerator.generateBaseContract(
+        'TypeMappingContract',
+        fields
+      );
 
       expect(contractCode).toContain('text: str');
       expect(contractCode).toContain('number: u256');
@@ -63,11 +71,18 @@ describe('GenLayerContractGenerator', () => {
         pass`;
 
       const requirements = 'Process user queries with AI analysis';
-      const enhancedContract = GenLayerContractGenerator.addLLMInteractions(baseContract, requirements);
+      const enhancedContract = GenLayerContractGenerator.addLLMInteractions(
+        baseContract,
+        requirements
+      );
 
-      expect(enhancedContract).toContain('def process_with_llm(self, input_text: str, prompt_type: str = "general") -> str:');
+      expect(enhancedContract).toContain(
+        'def process_with_llm(self, input_text: str, prompt_type: str = "general") -> str:'
+      );
       expect(enhancedContract).toContain('def analyze_sentiment(self, text: str) -> str:');
-      expect(enhancedContract).toContain('def generate_response(self, user_input: str, context: str = "") -> str:');
+      expect(enhancedContract).toContain(
+        'def generate_response(self, user_input: str, context: str = "") -> str:'
+      );
       expect(enhancedContract).toContain('gl.nondet.exec_prompt');
       expect(enhancedContract).toContain('gl.eq_principle_strict_eq');
       expect(enhancedContract).toContain('gl.eq_principle_prompt_non_comparative');
@@ -79,11 +94,16 @@ describe('GenLayerContractGenerator', () => {
     def __init__(self):
         pass`;
 
-      const enhancedContract = GenLayerContractGenerator.addLLMInteractions(baseContract, 'Test requirements');
+      const enhancedContract = GenLayerContractGenerator.addLLMInteractions(
+        baseContract,
+        'Test requirements'
+      );
 
       expect(enhancedContract).toContain('json.loads');
       expect(enhancedContract).toContain('json.dumps');
-      expect(enhancedContract).toContain('cleaned_result = result.replace("```json", "").replace("```", "").strip()');
+      expect(enhancedContract).toContain(
+        'cleaned_result = result.replace("```json", "").replace("```", "").strip()'
+      );
     });
   });
 
@@ -95,9 +115,15 @@ describe('GenLayerContractGenerator', () => {
 
       const urlTemplate = 'https://api.example.com/data';
       const processingLogic = 'Extract price information from API response';
-      const enhancedContract = GenLayerContractGenerator.addWebDataAccess(baseContract, urlTemplate, processingLogic);
+      const enhancedContract = GenLayerContractGenerator.addWebDataAccess(
+        baseContract,
+        urlTemplate,
+        processingLogic
+      );
 
-      expect(enhancedContract).toContain('def fetch_web_data(self, url: str = "https://api.example.com/data", mode: str = "text") -> dict:');
+      expect(enhancedContract).toContain(
+        'def fetch_web_data(self, url: str = "https://api.example.com/data", mode: str = "text") -> dict:'
+      );
       expect(enhancedContract).toContain('def fetch_multiple_sources(self, urls: DynArray[str]');
       expect(enhancedContract).toContain('def fetch_with_comparative_consensus(self, url: str');
       expect(enhancedContract).toContain('gl.nondet.web.render(url, mode=mode)');
@@ -112,10 +138,14 @@ describe('GenLayerContractGenerator', () => {
     def __init__(self):
         pass`;
 
-      const enhancedContract = GenLayerContractGenerator.addWebDataAccess(baseContract, 'https://api.test.com', 'Test processing');
+      const enhancedContract = GenLayerContractGenerator.addWebDataAccess(
+        baseContract,
+        'https://api.test.com',
+        'Test processing'
+      );
 
       expect(enhancedContract).toContain('gl.nondet.web.render(url, mode=mode)');
-      expect(enhancedContract).toContain('gl.nondet.exec_prompt(f\'\'\'');
+      expect(enhancedContract).toContain("gl.nondet.exec_prompt(f'''");
       expect(enhancedContract).toContain('json.loads(result_str)');
       expect(enhancedContract).toContain('Return valid JSON format');
     });
@@ -209,8 +239,12 @@ describe('GenLayerContractGenerator', () => {
         []
       );
 
-      expect(vectorStoreContract).toContain('def add_text(self, text: str, metadata: dict = None) -> str:');
-      expect(vectorStoreContract).toContain('def search_similar(self, query: str, top_k: int = 5) -> list:');
+      expect(vectorStoreContract).toContain(
+        'def add_text(self, text: str, metadata: dict = None) -> str:'
+      );
+      expect(vectorStoreContract).toContain(
+        'def search_similar(self, query: str, top_k: int = 5) -> list:'
+      );
       expect(vectorStoreContract).toContain('def get_store_info(self) -> dict:');
       expect(vectorStoreContract).toContain('VectorStore');
       expect(vectorStoreContract).toContain('self.vector_store');
@@ -239,7 +273,9 @@ describe('GenLayerContractGenerator', () => {
 
       expect(template).toContain('class TestDAO(gl.Contract):');
       expect(template).toContain('Intelligent DAO Governance Contract');
-      expect(template).toContain('def create_proposal(self, title: str, description: str) -> typing.Any:');
+      expect(template).toContain(
+        'def create_proposal(self, title: str, description: str) -> typing.Any:'
+      );
       expect(template).toContain('gl.nondet.exec_prompt(task)');
       expect(template).toContain('gl.eq_principle_strict_eq(analyze_proposal)');
     });
@@ -266,7 +302,9 @@ describe('GenLayerContractGenerator', () => {
 
       expect(template).toContain('class SentimentTracker(gl.Contract):');
       expect(template).toContain('sentiment tracking');
-      expect(template).toContain('def analyze_sentiment(self, text: str, topic: str = "general") -> typing.Any:');
+      expect(template).toContain(
+        'def analyze_sentiment(self, text: str, topic: str = "general") -> typing.Any:'
+      );
       expect(template).toContain('gl.eq_principle_strict_eq');
     });
 
@@ -279,7 +317,9 @@ describe('GenLayerContractGenerator', () => {
 
       expect(template).toContain('class MultiOracle(gl.Contract):');
       expect(template).toContain('Multi-source oracle');
-      expect(template).toContain('def fetch_consensus_data(self, data_type: str, query: str) -> typing.Any:');
+      expect(template).toContain(
+        'def fetch_consensus_data(self, data_type: str, query: str) -> typing.Any:'
+      );
     });
 
     it('should fallback to basic contract for unknown template', () => {

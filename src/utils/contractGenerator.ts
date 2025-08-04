@@ -20,16 +20,13 @@ export interface LLMPromptTemplate {
 
 export interface WebDataSource {
   url: string;
-  mode: "text" | "html";
+  mode: 'text' | 'html';
   extraction_pattern?: string;
   description: string;
 }
 
 export class GenLayerContractGenerator {
-  static generateBaseContract(
-    contractName: string,
-    fields: ContractField[] = []
-  ): string {
+  static generateBaseContract(contractName: string, fields: ContractField[] = []): string {
     let contractCode = `# { "Depends": "py-genlayer:test" }
 from genlayer import *
 from genlayer.gl.vm import UserError
@@ -42,51 +39,49 @@ class ${contractName}(gl.Contract):
 
     // Add storage fields with proper GenLayer types
     if (fields.length > 0) {
-      fields.forEach((field) => {
-        const comment = field.description ? ` # ${field.description}` : "";
-        contractCode += `    ${field.name}: ${this.mapGenLayerType(
-          field.type
-        )}${comment}\n`;
+      fields.forEach(field => {
+        const comment = field.description ? ` # ${field.description}` : '';
+        contractCode += `    ${field.name}: ${this.mapGenLayerType(field.type)}${comment}\n`;
       });
-      contractCode += `\n`;
+      contractCode += '\n';
     }
 
     // Add constructor with proper initialization
-    contractCode += `    def __init__(self`;
+    contractCode += '    def __init__(self';
 
     if (fields.length > 0) {
       const initParams = fields
-        .map((field) => {
+        .map(field => {
           const glType = this.mapGenLayerType(field.type);
           const defaultValue = this.getDefaultValue(glType);
           return `${field.name}: ${glType} = ${defaultValue}`;
         })
-        .join(", ");
+        .join(', ');
       contractCode += `, ${initParams}`;
     }
 
-    contractCode += `):\n`;
+    contractCode += '):\n';
 
     if (fields.length > 0) {
-      fields.forEach((field) => {
+      fields.forEach(field => {
         contractCode += `        self.${field.name} = ${field.name}\n`;
       });
     } else {
-      contractCode += `        pass\n`;
+      contractCode += '        pass\n';
     }
 
-    contractCode += `\n`;
+    contractCode += '\n';
 
     // Add default view methods
-    contractCode += `    @gl.public.view\n`;
-    contractCode += `    def get_info(self) -> str:\n`;
+    contractCode += '    @gl.public.view\n';
+    contractCode += '    def get_info(self) -> str:\n';
     contractCode += `        return "Intelligent Contract ${contractName} running on GenLayer"\n\n`;
 
     // Add getter methods for all fields
     if (fields.length > 0) {
-      fields.forEach((field) => {
+      fields.forEach(field => {
         const returnType = this.mapGenLayerType(field.type);
-        contractCode += `    @gl.public.view\n`;
+        contractCode += '    @gl.public.view\n';
         contractCode += `    def get_${field.name}(self) -> ${returnType}:\n`;
         contractCode += `        return self.${field.name}\n\n`;
       });
@@ -95,100 +90,97 @@ class ${contractName}(gl.Contract):
     return contractCode;
   }
 
-  static addLLMInteractions(
-    contractCode: string,
-    methodRequirements: string
-  ): string {
+  static addLLMInteractions(contractCode: string, methodRequirements: string): string {
     // Add comprehensive LLM interaction methods with proper equivalence principles
     const llmMethods =
-      "\n    @gl.public.write\n" +
+      '\n    @gl.public.write\n' +
       '    def process_with_llm(self, input_text: str, prompt_type: str = "general") -> str:\n' +
       '        """\n' +
-      "        Process input text using LLM capabilities with equivalence principle\n" +
-      "        Requirements: " +
+      '        Process input text using LLM capabilities with equivalence principle\n' +
+      '        Requirements: ' +
       methodRequirements +
-      "\n" +
+      '\n' +
       '        """\n' +
-      "        def llm_task() -> str:\n" +
+      '        def llm_task() -> str:\n' +
       '            if prompt_type == "analysis":\n' +
       '                task = f"""Analyze the following text according to these requirements: ' +
       methodRequirements +
-      "\n" +
-      "                \n" +
-      "                Text to analyze: {input_text}\n" +
-      "                \n" +
-      "                Provide a structured analysis focusing on:\n" +
-      "                1. Key themes and concepts\n" +
-      "                2. Sentiment and tone\n" +
-      "                3. Actionable insights\n" +
-      "                \n" +
+      '\n' +
+      '                \n' +
+      '                Text to analyze: {input_text}\n' +
+      '                \n' +
+      '                Provide a structured analysis focusing on:\n' +
+      '                1. Key themes and concepts\n' +
+      '                2. Sentiment and tone\n' +
+      '                3. Actionable insights\n' +
+      '                \n' +
       '                Return your analysis as a clear, concise summary."""\n' +
       '            elif prompt_type == "classification":\n' +
       '                task = f"""Classify the following text according to these requirements: ' +
       methodRequirements +
-      "\n" +
-      "                \n" +
-      "                Text: {input_text}\n" +
-      "                \n" +
+      '\n' +
+      '                \n' +
+      '                Text: {input_text}\n' +
+      '                \n' +
       '                Return only the classification result as a single word or phrase."""\n' +
-      "            else:\n" +
+      '            else:\n' +
       '                task = f"""Process the following text according to these requirements: ' +
       methodRequirements +
-      "\n" +
-      "                \n" +
-      "                Input: {input_text}\n" +
-      "                \n" +
+      '\n' +
+      '                \n' +
+      '                Input: {input_text}\n' +
+      '                \n' +
       '                Return a processed version of the text."""\n' +
-      "            \n" +
-      "            result = gl.nondet.exec_prompt(task)\n" +
-      "            return result.strip()\n" +
-      "        \n" +
-      "        # Use strict equality for consistent processing\n" +
-      "        processed_result = gl.eq_principle_strict_eq(llm_task)\n" +
-      "        return processed_result\n" +
-      "    \n" +
-      "    @gl.public.write\n" +
-      "    def analyze_sentiment(self, text: str) -> str:\n" +
+      '            \n' +
+      '            result = gl.nondet.exec_prompt(task)\n' +
+      '            return result.strip()\n' +
+      '        \n' +
+      '        # Use strict equality for consistent processing\n' +
+      '        processed_result = gl.eq_principle_strict_eq(llm_task)\n' +
+      '        return processed_result\n' +
+      '    \n' +
+      '    @gl.public.write\n' +
+      '    def analyze_sentiment(self, text: str) -> str:\n' +
       '        """\n' +
-      "        Analyze sentiment of text using non-comparative equivalence principle\n" +
+      '        Analyze sentiment of text using non-comparative equivalence principle\n' +
       '        """\n' +
-      "        result = gl.eq_principle_prompt_non_comparative(\n" +
-      "            lambda: gl.nondet.exec_prompt(f\"Analyze the sentiment of this text: '{text}'. Return only: positive, negative, or neutral\"),\n" +
+      '        result = gl.eq_principle_prompt_non_comparative(\n' +
+      '            lambda: gl.nondet.exec_prompt(f"Analyze the sentiment of this text: \'{text}\'. Return only: positive, negative, or neutral"),\n' +
       '            task="Classify sentiment as positive, negative, or neutral",\n' +
       '            criteria="""The output must be exactly one of: positive, negative, neutral.\n' +
-      "                        Consider context, tone, and implied meaning.\n" +
+      '                        Consider context, tone, and implied meaning.\n' +
       '                        Account for sarcasm and cultural nuances."""\n' +
-      "        )\n" +
-      "        return result\n" +
-      "    \n" +
-      "    @gl.public.write\n" +
+      '        )\n' +
+      '        return result\n' +
+      '    \n' +
+      '    @gl.public.write\n' +
       '    def generate_response(self, user_input: str, context: str = "") -> str:\n' +
       '        """\n' +
-      "        Generate contextual response using LLM with JSON output validation\n" +
+      '        Generate contextual response using LLM with JSON output validation\n' +
       '        """\n' +
-      "        def generate_json_response() -> str:\n" +
+      '        def generate_json_response() -> str:\n' +
       '            prompt = f"""Generate a helpful response to the user input.\n' +
-      "            \n" +
+      '            \n' +
       '            Context: {context if context else "No additional context provided"}\n' +
-      "            User Input: {user_input}\n" +
-      "            \n" +
-      "            Respond with JSON in this format:\n" +
-      "            {{\n" +
+      '            User Input: {user_input}\n' +
+      '            \n' +
+      '            Respond with JSON in this format:\n' +
+      '            {{\n' +
       '                "response": "your helpful response here",\n' +
       '                "confidence": 0.95,\n' +
       '                "category": "question/request/information/other"\n' +
       '            }}"""\n' +
-      "            \n" +
-      "            result = gl.nondet.exec_prompt(prompt)\n" +
-      "            # Clean and parse JSON response\n" +
+      '            \n' +
+      '            result = gl.nondet.exec_prompt(prompt)\n' +
+      '            # Clean and parse JSON response\n' +
       '            cleaned_result = result.replace("```json", "").replace("```", "").strip()\n' +
-      "            parsed = json.loads(cleaned_result)\n" +
-      "            return json.dumps(parsed, sort_keys=True)\n" +
-      "        \n" +
-      "        json_result = gl.eq_principle_strict_eq(generate_json_response)\n" +
-      "        response_data = json.loads(json_result)\n" +
+      '            parsed = json.loads(cleaned_result)\n' +
+      '            return json.dumps(parsed, sort_keys=True)\n' +
+      '        \n' +
+      '        json_result = gl.eq_principle_strict_eq(generate_json_response)\n' +
+      '        response_data = json.loads(json_result)\n' +
       '        return response_data["response"]\n' +
-      "    \n";
+      '    \n';
 
     return contractCode.trimEnd() + llmMethods;
   }
@@ -379,7 +371,7 @@ class ${contractName}(gl.Contract):
     // In a real implementation, this would modify the method to include equivalence principle validation
     const validationComment = `
     # Equivalence Principle Validation (${validationType})
-    # Tolerance: ${tolerance || "default"}
+    # Tolerance: ${tolerance || 'default'}
     # Validators will use this to determine if outputs are equivalent
 `;
 
@@ -395,7 +387,7 @@ class ${contractName}(gl.Contract):
     description: string,
     metadataFields: VectorStoreMetadata[] = []
   ): string {
-    let vectorStoreCode = `# { "Depends": "py-genlayer:test" }
+    const vectorStoreCode = `# { "Depends": "py-genlayer:test" }
 # { "Depends": "py-lib-genlayermodelwrappers:test" }
 
 from genlayer import *
@@ -503,7 +495,7 @@ class ${marketName}(gl.Contract):
         """
         Resolve the market based on real-world data
         Resolution Criteria: ${resolutionCriteria}
-        Web Sources: ${webSources.join(", ")}
+        Web Sources: ${webSources.join(', ')}
         """
         if self.resolved:
             raise Exception("Market already resolved")
@@ -571,23 +563,23 @@ class ${marketName}(gl.Contract):
   private static mapGenLayerType(type: string): string {
     // Map common types to GenLayer types
     const typeMap: { [key: string]: string } = {
-      string: "str",
-      text: "str",  
-      integer: "u256",
-      int: "u256",
-      number: "u256",
-      boolean: "bool",
-      bool: "bool",
-      address: "Address",
-      list: "DynArray[str]",
-      array: "DynArray[str]",
-      dict: "TreeMap[str, str]",
-      dictionary: "TreeMap[str, str]",
-      map: "TreeMap[str, str]",
-      float: "f64",
-      decimal: "f64",
-      bytes: "bytes",
-      timestamp: "u256",
+      string: 'str',
+      text: 'str',
+      integer: 'u256',
+      int: 'u256',
+      number: 'u256',
+      boolean: 'bool',
+      bool: 'bool',
+      address: 'Address',
+      list: 'DynArray[str]',
+      array: 'DynArray[str]',
+      dict: 'TreeMap[str, str]',
+      dictionary: 'TreeMap[str, str]',
+      map: 'TreeMap[str, str]',
+      float: 'f64',
+      decimal: 'f64',
+      bytes: 'bytes',
+      timestamp: 'u256'
     };
 
     return typeMap[type.toLowerCase()] || type;
@@ -597,18 +589,18 @@ class ${marketName}(gl.Contract):
     // Provide appropriate default values for GenLayer types
     const defaults: { [key: string]: string } = {
       str: '""',
-      u256: "u256(0)",
-      f64: "0.0",
-      bool: "False",
+      u256: 'u256(0)',
+      f64: '0.0',
+      bool: 'False',
       Address: "Address('0x0000000000000000000000000000000000000000')",
-      bytes: "b''",
+      bytes: "b''"
     };
 
     // Handle complex types
-    if (glType.startsWith("DynArray")) {
+    if (glType.startsWith('DynArray')) {
       return `${glType}()`;
     }
-    if (glType.startsWith("TreeMap")) {
+    if (glType.startsWith('TreeMap')) {
       return `${glType}()`;
     }
 
@@ -621,23 +613,20 @@ class ${marketName}(gl.Contract):
     customParams: any = {}
   ): string {
     switch (templateType) {
-      case "dao_governance":
+      case 'dao_governance':
         return this.generateDAOGovernance(contractName, customParams);
-      case "content_moderation":
+      case 'content_moderation':
         return this.generateContentModeration(contractName, customParams);
-      case "sentiment_tracker":
+      case 'sentiment_tracker':
         return this.generateSentimentTracker(contractName, customParams);
-      case "multi_oracle":
+      case 'multi_oracle':
         return this.generateMultiOracle(contractName, customParams);
       default:
         return this.generateBaseContract(contractName, []);
     }
   }
 
-  private static generateDAOGovernance(
-    contractName: string,
-    params: any
-  ): string {
+  private static generateDAOGovernance(contractName: string, params: any): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
 from genlayer.gl.vm import UserError
@@ -676,10 +665,7 @@ class ${contractName}(gl.Contract):
 `;
   }
 
-  private static generateContentModeration(
-    contractName: string,
-    params: any
-  ): string {
+  private static generateContentModeration(contractName: string, params: any): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
 from genlayer.gl.vm import UserError
@@ -716,10 +702,7 @@ class ${contractName}(gl.Contract):
 `;
   }
 
-  private static generateSentimentTracker(
-    contractName: string,
-    params: any
-  ): string {
+  private static generateSentimentTracker(contractName: string, params: any): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
 from genlayer.gl.vm import UserError
@@ -751,10 +734,7 @@ class ${contractName}(gl.Contract):
 `;
   }
 
-  private static generateMultiOracle(
-    contractName: string,
-    params: any
-  ): string {
+  private static generateMultiOracle(contractName: string, params: any): string {
     return `# { "Depends": "py-genlayer:test" }
 from genlayer import *
 from genlayer.gl.vm import UserError
