@@ -35,6 +35,36 @@ prediction markets, AI-powered oracles, and more—and is designed to make the
 developer experience easier and more streamlined when building, testing, and
 deploying intelligent contracts.
 
+## 🚀 Installation & Usage
+
+### Quick Setup with Claude Code
+
+**Add the MCP server** (no installation needed):
+Simply run this command in Claude Code:
+```bash
+claude mcp add genlayer npx -- -y @albert-mr/genlayer-mcp-server@latest
+```
+
+### Alternative IDE Setup
+
+For other IDEs that support MCP:
+
+**Use directly with npx** (no installation required):
+Add to your MCP configuration:
+```json
+{
+  "mcpServers": {
+    "genlayer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@albert-mr/genlayer-mcp-server@latest"
+      ]
+    }
+  }
+}
+```
+
 ## 🌐 GenLayer Resources
 
 ### Documentation
