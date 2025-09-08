@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Setup Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: '20'
         cache: 'npm'
@@ -36,7 +36,7 @@ jobs:
       
     # Publish to npm
     - name: Setup Node.js for npm
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: '20'
         registry-url: 'https://registry.npmjs.org/'
@@ -49,7 +49,7 @@ jobs:
         
     # Publish to GitHub Packages
     - name: Setup Node.js for GitHub Packages
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: '20'
         registry-url: 'https://npm.pkg.github.com/'
