@@ -217,8 +217,8 @@ describe('Integration Tests', () => {
       expect(contractCode).toContain('analyze_sentiment');
       expect(contractCode).toContain('generate_response');
       expect(contractCode).toContain('gl.nondet.exec_prompt');
-      expect(contractCode).toContain('gl.eq_principle_strict_eq');
-      expect(contractCode).toContain('gl.eq_principle_prompt_non_comparative');
+      expect(contractCode).toContain('gl.eq_principle.strict_eq');
+      expect(contractCode).toContain('gl.eq_principle.prompt_non_comparative');
 
       // Verify web access
       expect(contractCode).toContain('fetch_web_data');
@@ -272,7 +272,7 @@ describe('Integration Tests', () => {
       // Verify AI-powered resolution
       expect(marketCode).toContain('def resolve_market(self) -> typing.Any:');
       expect(marketCode).toContain('gl.get_webpage(source_url, mode="text")');
-      expect(marketCode).toContain('gl.eq_principle_strict_eq');
+      expect(marketCode).toContain('gl.eq_principle.strict_eq');
       expect(marketCode).toContain('json.loads(resolution_result)');
 
       // Verify advanced features
@@ -307,7 +307,7 @@ describe('Integration Tests', () => {
 
       // Verify vector store structure
       expect(vectorCode).toContain('AdvancedDocumentStore');
-      expect(vectorCode).toContain('VectorStore');
+      expect(vectorCode).toContain('VecDB');
       expect(vectorCode).toContain('add_text');
       expect(vectorCode).toContain('search_similar');
       expect(vectorCode).toContain('metadata');

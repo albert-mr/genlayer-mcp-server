@@ -6,6 +6,7 @@ import { TypesAndStorageTools } from './modules/typesAndStorage.js';
 import { DeploymentAndDebuggingTools } from './modules/deploymentAndDebugging.js';
 import { InteractionAndIntegrationTools } from './modules/interactionAndIntegration.js';
 import { ConceptsExplanationTools } from './modules/conceptsExplanation.js';
+import { ApiDocsLookupTools } from './modules/apiDocsLookup.js';
 
 export interface ToolResult {
   content: string;
@@ -147,5 +148,9 @@ export class GenLayerTools {
     package_manager?: string;
   }): Promise<ToolResult> {
     return InteractionAndIntegrationTools.generateProjectBoilerplate(params);
+  }
+
+  static async fetchLatestApiDocs(params: { topic?: string }): Promise<ToolResult> {
+    return ApiDocsLookupTools.fetchLatestApiDocs(params);
   }
 }

@@ -337,6 +337,24 @@ export const GenerateProjectBoilerplateSchema = z.object({
   package_manager: z.enum(['npm', 'yarn', 'pnpm']).default('npm')
 });
 
+export const FetchLatestApiDocsSchema = z.object({
+  topic: z
+    .enum([
+      'types',
+      'decorators',
+      'web_access',
+      'llm',
+      'consensus',
+      'storage',
+      'events',
+      'contract_structure',
+      'message_access',
+      'evm_integration',
+      'all'
+    ])
+    .default('all')
+});
+
 // Type definitions derived from schemas
 export type GenerateIntelligentContractParams = z.infer<typeof GenerateIntelligentContractSchema>;
 export type GenerateContractTemplateParams = z.infer<typeof GenerateContractTemplateSchema>;
@@ -357,6 +375,7 @@ export type GenerateContractInteractionExamplesParams = z.infer<
 >;
 export type GenerateTestingFrameworkParams = z.infer<typeof GenerateTestingFrameworkSchema>;
 export type GenerateProjectBoilerplateParams = z.infer<typeof GenerateProjectBoilerplateSchema>;
+export type FetchLatestApiDocsParams = z.infer<typeof FetchLatestApiDocsSchema>;
 
 // Schema lookup map
 export const toolSchemas = {
@@ -374,7 +393,8 @@ export const toolSchemas = {
   generate_genlayerjs_integration: GenerateGenLayerJSIntegrationSchema,
   generate_contract_interaction_examples: GenerateContractInteractionExamplesSchema,
   generate_testing_framework: GenerateTestingFrameworkSchema,
-  generate_project_boilerplate: GenerateProjectBoilerplateSchema
+  generate_project_boilerplate: GenerateProjectBoilerplateSchema,
+  fetch_latest_api_docs: FetchLatestApiDocsSchema
 } as const;
 
 export type ToolName = keyof typeof toolSchemas;

@@ -25,7 +25,8 @@ export const GENLAYER_URLS = {
   studio: 'https://studio.genlayer.com/',
   docs: 'https://docs.genlayer.com/',
   github: 'https://github.com/genlayer-protocol',
-  discord: 'https://discord.gg/genlayer'
+  discord: 'https://discord.gg/genlayer',
+  apiReference: 'https://sdk.genlayer.com/main/_static/ai/api.txt'
 } as const;
 
 export const DEFAULT_VALUES = {
@@ -55,27 +56,45 @@ export const DEFAULT_VALUES = {
 } as const;
 
 export const GENLAYER_TYPES = {
-  // Primitive types mapping
+  // Primitive types mapping (aligned with official GenLayer API)
   primitives: {
     string: 'str',
     integer: 'u256',
     boolean: 'bool',
     address: 'Address',
-    float: 'float',
-    bytes: 'bytes'
+    float: 'float', // Standard Python float (not f64)
+    bytes: 'bytes',
+    int: 'int' // Standard Python int for non-storage contexts
   },
 
   // Collection types
   collections: {
-    list: 'DynArray',
-    dict: 'TreeMap'
+    list: 'DynArray', // Dynamic-size arrays
+    dict: 'TreeMap', // Ordered key-value mapping
+    array: 'Array' // Fixed-size arrays (distinct from DynArray)
   },
 
   // Special GenLayer types
   special: {
-    vector_store: 'VecDB',
+    vector_store: 'VecDB', // From genlayer_embeddings module
     embedding: 'np.float32',
-    model: 'SentenceTransformer'
+    model: 'SentenceTransformer', // From genlayer_embeddings module
+    hash: 'Keccak256' // Hash function type
+  },
+
+  // Storage types (for advanced patterns)
+  storage: {
+    slot: 'Slot', // Low-level storage location
+    indirection: 'Indirection', // Single-slot wrapper
+    vla: 'VLA', // Variable-length arrays with 4-byte length header
+    root: 'Root' // Contract storage access point
+  },
+
+  // Integer type aliases
+  integerAliases: {
+    unsigned: ['u8', 'u16', 'u32', 'u64', 'u128', 'u256', 'u160'],
+    signed: ['i8', 'i16', 'i32', 'i64', 'i128', 'i256'],
+    bigint: 'bigint' // Arbitrary precision integer
   }
 } as const;
 

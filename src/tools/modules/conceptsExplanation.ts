@@ -20,7 +20,7 @@ The Equivalence Principle is GenLayer's consensus mechanism for handling non-det
 
 ## Types of Equivalence Validation
 
-### 1. Strict Equality (gl.eq_principle_strict_eq)
+### 1. Strict Equality (gl.eq_principle.strict_eq)
 Used when results must be identical across all validators.
 
 ${
@@ -34,14 +34,14 @@ def process_deterministic_data(self, input_data: str) -> str:
         return result
     
     # All validators must produce identical results
-    consensus_result = gl.eq_principle_strict_eq(deterministic_task)
+    consensus_result = gl.eq_principle.strict_eq(deterministic_task)
     return consensus_result
 \`\`\`
 `
     : ''
 }
 
-### 2. Comparative Validation (gl.eq_principle_prompt_comparative)
+### 2. Comparative Validation (gl.eq_principle.prompt_comparative)
 Used for numerical results where small variations are acceptable.
 
 ${
@@ -51,10 +51,10 @@ ${
 def calculate_market_price(self, symbol: str) -> str:
     def price_task() -> str:
         prompt = f"Get current price of {symbol} in USD"
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
     # Allow small variations in price calculations
-    result = gl.eq_principle_prompt_comparative(
+    result = gl.eq_principle.prompt_comparative(
         price_task,
         task="Get market price",
         criteria="Price should be within 1% tolerance",
@@ -66,7 +66,7 @@ def calculate_market_price(self, symbol: str) -> str:
     : ''
 }
 
-### 3. Non-Comparative Validation (gl.eq_principle_prompt_non_comparative)
+### 3. Non-Comparative Validation (gl.eq_principle.prompt_non_comparative)
 Used for subjective decisions where exact matches aren't expected.
 
 ${
@@ -76,10 +76,10 @@ ${
 def analyze_sentiment(self, text: str) -> str:
     def sentiment_task() -> str:
         prompt = f"Analyze sentiment of: {text}. Return: positive, negative, or neutral"
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
     # Subjective analysis with qualitative validation
-    result = gl.eq_principle_prompt_non_comparative(
+    result = gl.eq_principle.prompt_non_comparative(
         sentiment_task,
         task="Sentiment analysis",
         criteria="Must return one of: positive, negative, neutral"
@@ -152,10 +152,10 @@ def ai_decision(self, input_data: str) -> str:
     def ai_task() -> str:
         # This will be executed by the leader validator
         prompt = f"Make a decision based on: {input_data}"
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
     # Consensus ensures all validators agree on the AI result
-    result = gl.eq_principle_strict_eq(ai_task)
+    result = gl.eq_principle.strict_eq(ai_task)
     
     # Result is only finalized if validators reach consensus
     return result
@@ -201,7 +201,7 @@ GenLayer enables smart contracts to directly interact with Large Language Models
 
 ## Core LLM Functions
 
-### 1. gl.exec_prompt()
+### 1. gl.nondet.exec_prompt()
 Execute LLM prompts within smart contracts.
 
 ${
@@ -210,7 +210,7 @@ ${
 @gl.public.write
 def ask_ai(self, question: str) -> str:
     # Direct LLM interaction
-    response = gl.exec_prompt(f"Answer this question: {question}")
+    response = gl.nondet.exec_prompt(f"Answer this question: {question}")
     return response
 
 @gl.public.write
@@ -223,7 +223,7 @@ def analyze_content(self, content: str) -> str:
     {{"sentiment": "positive/negative/neutral", "topics": ["topic1", "topic2"], "summary": "brief summary"}}
     \"\"\"
     
-    result = gl.exec_prompt(prompt)
+    result = gl.nondet.exec_prompt(prompt)
     return result
 \`\`\`
 `
@@ -246,10 +246,10 @@ def classify_text(self, text: str) -> str:
         
         Return only the category name.
         \"\"\"
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
     # Use consensus to ensure consistent classification
-    category = gl.eq_principle_strict_eq(classification_task)
+    category = gl.eq_principle.strict_eq(classification_task)
     return category
 \`\`\`
 `
@@ -286,11 +286,11 @@ class ChatContract(gl.Contract):
             User: {message}
             Assistant: \"\"\"
             
-            response = gl.exec_prompt(prompt)
+            response = gl.nondet.exec_prompt(prompt)
             return response
         
         # Get AI response with consensus
-        ai_response = gl.eq_principle_strict_eq(chat_task)
+        ai_response = gl.eq_principle.strict_eq(chat_task)
         
         # Update conversation history
         self.conversations[sender].append(f"User: {message}")
@@ -313,18 +313,18 @@ ${
 @gl.public.write
 def complex_analysis(self, data: str) -> str:
     def step1_task() -> str:
-        return gl.exec_prompt(f"Step 1 - Extract key facts from: {data}")
+        return gl.nondet.exec_prompt(f"Step 1 - Extract key facts from: {data}")
     
     def step2_task(facts: str) -> str:
-        return gl.exec_prompt(f"Step 2 - Analyze implications of: {facts}")
+        return gl.nondet.exec_prompt(f"Step 2 - Analyze implications of: {facts}")
     
     def step3_task(analysis: str) -> str:
-        return gl.exec_prompt(f"Step 3 - Provide recommendations based on: {analysis}")
+        return gl.nondet.exec_prompt(f"Step 3 - Provide recommendations based on: {analysis}")
     
     # Execute steps with consensus
-    facts = gl.eq_principle_strict_eq(step1_task)
-    analysis = gl.eq_principle_strict_eq(lambda: step2_task(facts))
-    recommendations = gl.eq_principle_strict_eq(lambda: step3_task(analysis))
+    facts = gl.eq_principle.strict_eq(step1_task)
+    analysis = gl.eq_principle.strict_eq(lambda: step2_task(facts))
+    recommendations = gl.eq_principle.strict_eq(lambda: step3_task(analysis))
     
     return recommendations
 \`\`\`
@@ -342,7 +342,7 @@ ${
 def safe_content_generation(self, topic: str) -> str:
     def generation_task() -> str:
         prompt = f"Write educational content about: {topic}"
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
     def validation_task(content: str) -> str:
         validation_prompt = f\"\"\"
@@ -355,13 +355,13 @@ def safe_content_generation(self, topic: str) -> str:
         
         Return: APPROVED or REJECTED with reason
         \"\"\"
-        return gl.exec_prompt(validation_prompt)
+        return gl.nondet.exec_prompt(validation_prompt)
     
     # Generate content
-    content = gl.eq_principle_strict_eq(generation_task)
+    content = gl.eq_principle.strict_eq(generation_task)
     
     # Validate content
-    validation = gl.eq_principle_strict_eq(lambda: validation_task(content))
+    validation = gl.eq_principle.strict_eq(lambda: validation_task(content))
     
     if "APPROVED" in validation:
         return content
@@ -417,7 +417,7 @@ def fetch_price_data(self, symbol: str) -> str:
             return data2
     
     # Ensure consensus on web data
-    result = gl.eq_principle_strict_eq(web_task)
+    result = gl.eq_principle.strict_eq(web_task)
     return result
 \`\`\`
 `
@@ -444,10 +444,10 @@ def get_weather_report(self, city: str) -> str:
         Return format: "Temperature: X°C, Conditions: Y"
         \"\"\"
         
-        processed = gl.exec_prompt(prompt)
+        processed = gl.nondet.exec_prompt(prompt)
         return processed
     
-    weather_info = gl.eq_principle_strict_eq(weather_task)
+    weather_info = gl.eq_principle.strict_eq(weather_task)
     return weather_info
 \`\`\`
 `
@@ -491,10 +491,10 @@ def verified_news_summary(self, topic: str) -> str:
         {combined_data}
         \"\"\"
         
-        summary = gl.exec_prompt(summary_prompt)
+        summary = gl.nondet.exec_prompt(summary_prompt)
         return summary
     
-    verified_summary = gl.eq_principle_strict_eq(news_task)
+    verified_summary = gl.eq_principle.strict_eq(news_task)
     return verified_summary
 \`\`\`
 `
@@ -529,7 +529,7 @@ class WebMonitor(gl.Contract):
             self.last_hashes[url] = current_hash
             return "No change detected"
         
-        result = gl.eq_principle_strict_eq(monitor_task)
+        result = gl.eq_principle.strict_eq(monitor_task)
         return result
 \`\`\`
 `
@@ -564,10 +564,10 @@ def social_sentiment_analysis(self, hashtag: str) -> str:
         }}
         \"\"\"
         
-        analysis = gl.exec_prompt(analysis_prompt)
+        analysis = gl.nondet.exec_prompt(analysis_prompt)
         return analysis
     
-    sentiment_result = gl.eq_principle_strict_eq(sentiment_task)
+    sentiment_result = gl.eq_principle.strict_eq(sentiment_task)
     return sentiment_result
 \`\`\`
 `
@@ -726,9 +726,9 @@ def create_content_clusters(self, num_clusters: int = 5) -> list:
         }}
         \"\"\"
         
-        return gl.exec_prompt(prompt)
+        return gl.nondet.exec_prompt(prompt)
     
-    cluster_info = gl.eq_principle_strict_eq(clustering_task)
+    cluster_info = gl.eq_principle.strict_eq(clustering_task)
     return cluster_info
 \`\`\`
 `
@@ -831,10 +831,10 @@ class IntelligentOracle(gl.Contract):
             Format: "Prediction: [answer], Confidence: [level]%"
             \"\"\"
             
-            return gl.exec_prompt(prompt)
+            return gl.nondet.exec_prompt(prompt)
         
         # Get consensus prediction
-        prediction = gl.eq_principle_strict_eq(prediction_task)
+        prediction = gl.eq_principle.strict_eq(prediction_task)
         self.predictions[question] = prediction
         
         return prediction
@@ -869,9 +869,9 @@ def analyze_market_sentiment(self, symbol: str) -> str:
         Return: BULLISH, BEARISH, or NEUTRAL with reasoning
         \"\"\"
         
-        return gl.exec_prompt(analysis_prompt)
+        return gl.nondet.exec_prompt(analysis_prompt)
     
-    sentiment = gl.eq_principle_strict_eq(analysis_task)
+    sentiment = gl.eq_principle.strict_eq(analysis_task)
     return sentiment
 \`\`\`
 `
@@ -906,9 +906,9 @@ class AdaptiveGovernance(gl.Contract):
             Provide reasoning.
             \"\"\"
             
-            return gl.exec_prompt(prompt)
+            return gl.nondet.exec_prompt(prompt)
         
-        decision = gl.eq_principle_strict_eq(evaluation_task)
+        decision = gl.eq_principle.strict_eq(evaluation_task)
         
         # Adapt rules based on decision
         if "APPROVE" in decision:

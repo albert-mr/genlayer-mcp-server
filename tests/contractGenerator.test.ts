@@ -84,8 +84,8 @@ describe('GenLayerContractGenerator', () => {
         'def generate_response(self, user_input: str, context: str = "") -> str:'
       );
       expect(enhancedContract).toContain('gl.nondet.exec_prompt');
-      expect(enhancedContract).toContain('gl.eq_principle_strict_eq');
-      expect(enhancedContract).toContain('gl.eq_principle_prompt_non_comparative');
+      expect(enhancedContract).toContain('gl.eq_principle.strict_eq');
+      expect(enhancedContract).toContain('gl.eq_principle.prompt_non_comparative');
       expect(enhancedContract).toContain(requirements);
     });
 
@@ -127,8 +127,8 @@ describe('GenLayerContractGenerator', () => {
       expect(enhancedContract).toContain('def fetch_multiple_sources(self, urls: DynArray[str]');
       expect(enhancedContract).toContain('def fetch_with_comparative_consensus(self, url: str');
       expect(enhancedContract).toContain('gl.nondet.web.render(url, mode=mode)');
-      expect(enhancedContract).toContain('gl.eq_principle_strict_eq(web_fetch_task)');
-      expect(enhancedContract).toContain('gl.eq_principle_prompt_comparative(');
+      expect(enhancedContract).toContain('gl.eq_principle.strict_eq(web_fetch_task)');
+      expect(enhancedContract).toContain('gl.eq_principle.prompt_comparative(');
       expect(enhancedContract).toContain(urlTemplate);
       expect(enhancedContract).toContain(processingLogic);
     });
@@ -225,7 +225,7 @@ describe('GenLayerContractGenerator', () => {
       );
 
       expect(vectorStoreContract).toContain(`class ${storeName}(gl.Contract):`);
-      expect(vectorStoreContract).toContain('VectorStore');
+      expect(vectorStoreContract).toContain('VecDB');
       expect(vectorStoreContract).toContain('add_text');
       expect(vectorStoreContract).toContain('search_similar');
       expect(vectorStoreContract).toContain('get_store_info');
@@ -240,14 +240,14 @@ describe('GenLayerContractGenerator', () => {
       );
 
       expect(vectorStoreContract).toContain(
-        'def add_text(self, text: str, metadata: dict = None) -> str:'
+        'def add_text(self, text: str, metadata: dict = None) -> u256:'
       );
       expect(vectorStoreContract).toContain(
         'def search_similar(self, query: str, top_k: int = 5) -> list:'
       );
       expect(vectorStoreContract).toContain('def get_store_info(self) -> dict:');
-      expect(vectorStoreContract).toContain('VectorStore');
-      expect(vectorStoreContract).toContain('self.vector_store');
+      expect(vectorStoreContract).toContain('VecDB');
+      expect(vectorStoreContract).toContain('self.vector_db');
     });
 
     it('should include LLM-powered filtering', () => {
@@ -257,7 +257,7 @@ describe('GenLayerContractGenerator', () => {
         []
       );
 
-      expect(vectorStoreContract).toContain('VectorStore');
+      expect(vectorStoreContract).toContain('VecDB');
       expect(vectorStoreContract).toContain('add_text');
       expect(vectorStoreContract).toContain('search');
     });
@@ -277,7 +277,7 @@ describe('GenLayerContractGenerator', () => {
         'def create_proposal(self, title: str, description: str) -> typing.Any:'
       );
       expect(template).toContain('gl.nondet.exec_prompt(task)');
-      expect(template).toContain('gl.eq_principle_strict_eq(analyze_proposal)');
+      expect(template).toContain('gl.eq_principle.strict_eq(analyze_proposal)');
     });
 
     it('should generate content moderation template', () => {
@@ -290,7 +290,7 @@ describe('GenLayerContractGenerator', () => {
       expect(template).toContain('class ContentFilter(gl.Contract):');
       expect(template).toContain('AI-powered content moderation');
       expect(template).toContain('def moderate_content(self, content: str) -> typing.Any:');
-      expect(template).toContain('gl.eq_principle_prompt_non_comparative');
+      expect(template).toContain('gl.eq_principle.prompt_non_comparative');
     });
 
     it('should generate sentiment tracker template', () => {
@@ -305,7 +305,7 @@ describe('GenLayerContractGenerator', () => {
       expect(template).toContain(
         'def analyze_sentiment(self, text: str, topic: str = "general") -> typing.Any:'
       );
-      expect(template).toContain('gl.eq_principle_strict_eq');
+      expect(template).toContain('gl.eq_principle.strict_eq');
     });
 
     it('should generate multi-oracle template', () => {
@@ -343,10 +343,10 @@ describe('GenLayerContractGenerator', () => {
       expect(mapType('string')).toBe('str');
       expect(mapType('text')).toBe('str');
       expect(mapType('integer')).toBe('u256');
-      expect(mapType('int')).toBe('u256');
+      expect(mapType('int')).toBe('int');
       expect(mapType('number')).toBe('u256');
-      expect(mapType('float')).toBe('f64');
-      expect(mapType('decimal')).toBe('f64');
+      expect(mapType('float')).toBe('float');
+      expect(mapType('decimal')).toBe('float');
       expect(mapType('boolean')).toBe('bool');
       expect(mapType('bool')).toBe('bool');
       expect(mapType('address')).toBe('Address');
@@ -372,7 +372,8 @@ describe('GenLayerContractGenerator', () => {
 
       expect(getDefault('str')).toBe('""');
       expect(getDefault('u256')).toBe('u256(0)');
-      expect(getDefault('f64')).toBe('0.0');
+      expect(getDefault('int')).toBe('0');
+      expect(getDefault('float')).toBe('0.0');
       expect(getDefault('bool')).toBe('False');
       expect(getDefault('Address')).toBe("Address('0x0000000000000000000000000000000000000000')");
       expect(getDefault('bytes')).toBe("b''");

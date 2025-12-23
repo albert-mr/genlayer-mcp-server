@@ -97,6 +97,9 @@ async function handleToolCall(
       case 'generate_project_boilerplate':
         result = await GenLayerTools.generateProjectBoilerplate(sanitizedArgs as any);
         break;
+      case 'fetch_latest_api_docs':
+        result = await GenLayerTools.fetchLatestApiDocs(sanitizedArgs as any);
+        break;
       default:
         return {
           content: [{ type: 'text', text: `Error: Unhandled tool '${toolName}'` }],

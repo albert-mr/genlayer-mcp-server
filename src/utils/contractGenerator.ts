@@ -136,7 +136,7 @@ class ${contractName}(gl.Contract):
       '            return result.strip()\n' +
       '        \n' +
       '        # Use strict equality for consistent processing\n' +
-      '        processed_result = gl.eq_principle_strict_eq(llm_task)\n' +
+      '        processed_result = gl.eq_principle.strict_eq(llm_task)\n' +
       '        return processed_result\n' +
       '    \n' +
       '    @gl.public.write\n' +
@@ -144,7 +144,7 @@ class ${contractName}(gl.Contract):
       '        """\n' +
       '        Analyze sentiment of text using non-comparative equivalence principle\n' +
       '        """\n' +
-      '        result = gl.eq_principle_prompt_non_comparative(\n' +
+      '        result = gl.eq_principle.prompt_non_comparative(\n' +
       '            lambda: gl.nondet.exec_prompt(f"Analyze the sentiment of this text: \'{text}\'. Return only: positive, negative, or neutral"),\n' +
       '            task="Classify sentiment as positive, negative, or neutral",\n' +
       '            criteria="""The output must be exactly one of: positive, negative, neutral.\n' +
@@ -177,7 +177,7 @@ class ${contractName}(gl.Contract):
       '            parsed = json.loads(cleaned_result)\n' +
       '            return json.dumps(parsed, sort_keys=True)\n' +
       '        \n' +
-      '        json_result = gl.eq_principle_strict_eq(generate_json_response)\n' +
+      '        json_result = gl.eq_principle.strict_eq(generate_json_response)\n' +
       '        response_data = json.loads(json_result)\n' +
       '        return response_data["response"]\n' +
       '    \n';
@@ -234,7 +234,7 @@ class ${contractName}(gl.Contract):
                 })
         
         # Use strict equality for deterministic web data processing
-        result_str = gl.eq_principle_strict_eq(web_fetch_task)
+        result_str = gl.eq_principle.strict_eq(web_fetch_task)
         
         try:
             # Parse the JSON result
@@ -293,7 +293,7 @@ class ${contractName}(gl.Contract):
             processed = gl.nondet.exec_prompt(aggregated_prompt)
             return processed.strip()
         
-        result_str = gl.eq_principle_strict_eq(multi_source_task)
+        result_str = gl.eq_principle.strict_eq(multi_source_task)
         
         try:
             aggregated_data = json.loads(result_str)
@@ -333,7 +333,7 @@ class ${contractName}(gl.Contract):
             return result.strip()
         
         # Use comparative consensus for numerical results with tolerance
-        result_str = gl.eq_principle_prompt_comparative(
+        result_str = gl.eq_principle.prompt_comparative(
             comparative_web_task,
             task="Extract and analyze numerical data from web source",
             tolerance=0.1  # 10% tolerance for numerical variations
@@ -388,34 +388,108 @@ class ${contractName}(gl.Contract):
     metadataFields: VectorStoreMetadata[] = []
   ): string {
     const vectorStoreCode = `# { "Depends": "py-genlayer:test" }
-# { "Depends": "py-lib-genlayermodelwrappers:test" }
 
 from genlayer import *
 from genlayer.gl.vm import UserError
-from backend.node.genvm.std.vector_store import VectorStore
+from genlayer_embeddings import VecDB, SentenceTransformer
+import numpy as np
 
 class ${storeName}(gl.Contract):
-    vector_store: VectorStore
-    
+    """
+    Vector store contract for semantic search capabilities
+    Description: ${description}
+    """
+    # Vector database for storing embeddings
+    vector_db: VecDB
+    # Text embedder for converting text to vectors
+    embedder: SentenceTransformer
+    # Counter for tracking entries
+    entry_count: u256
+    # Mapping of IDs to metadata
+    metadata_store: TreeMap[u256, dict]
+
     def __init__(self):
-        self.vector_store = VectorStore()
-    
+        self.vector_db = VecDB()
+        self.embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        self.entry_count = u256(0)
+        self.metadata_store = TreeMap[u256, dict]()
+
     @gl.public.write
-    def add_text(self, text: str, metadata: dict = None) -> str:
+    def add_text(self, text: str, metadata: dict = None) -> u256:
         """
-        Add text to the vector store
+        Add text to the vector store with optional metadata
         Description: ${description}
+
+        Args:
+            text: The text to embed and store
+            metadata: Optional metadata to associate with the text
+
+        Returns:
+            The ID of the stored entry
         """
-        self.vector_store.add_text(text, metadata or {})
-        return f"Added text to ${storeName}"
-    
+        # Generate embedding for the text
+        embedding = self.embedder(text)
+
+        # Insert into vector database
+        entry_id = self.vector_db.insert(key=embedding, val=text)
+
+        # Store metadata if provided
+        if metadata:
+            self.metadata_store[u256(entry_id)] = metadata
+
+        self.entry_count += u256(1)
+        return u256(entry_id)
+
     @gl.public.view
     def search_similar(self, query: str, top_k: int = 5) -> list:
         """
-        Search for similar texts in the vector store
+        Search for similar texts in the vector store using KNN
+
+        Args:
+            query: The search query text
+            top_k: Number of similar results to return
+
+        Returns:
+            List of similar entries with their texts and similarity scores
         """
-        return self.vector_store.search(query, top_k)
-    
+        # Generate embedding for the query
+        query_embedding = self.embedder(query)
+
+        # Perform KNN search
+        neighbors = list(self.vector_db.knn(query_embedding, k=top_k))
+
+        results = []
+        for neighbor in neighbors:
+            entry = self.vector_db.get_by_id(neighbor.id)
+            result = {
+                "id": neighbor.id,
+                "text": entry.val if entry else "",
+                "distance": float(neighbor.distance)
+            }
+            # Include metadata if available
+            if u256(neighbor.id) in self.metadata_store:
+                result["metadata"] = self.metadata_store[u256(neighbor.id)]
+            results.append(result)
+
+        return results
+
+    @gl.public.view
+    def get_by_id(self, entry_id: u256) -> dict:
+        """
+        Get a specific entry by its ID
+        """
+        entry = self.vector_db.get_by_id(int(entry_id))
+        if entry is None:
+            return {"error": "Entry not found"}
+
+        result = {
+            "id": int(entry_id),
+            "text": entry.val
+        }
+        if entry_id in self.metadata_store:
+            result["metadata"] = self.metadata_store[entry_id]
+        return result
+
     @gl.public.view
     def get_store_info(self) -> dict:
         """
@@ -424,7 +498,7 @@ class ${storeName}(gl.Contract):
         return {
             "name": "${storeName}",
             "description": "${description}",
-            "size": self.vector_store.size()
+            "entry_count": int(self.entry_count)
         }
 `;
 
@@ -561,12 +635,12 @@ class ${marketName}(gl.Contract):
   }
 
   private static mapGenLayerType(type: string): string {
-    // Map common types to GenLayer types
+    // Map common types to GenLayer types (aligned with official GenLayer API)
     const typeMap: { [key: string]: string } = {
       string: 'str',
       text: 'str',
       integer: 'u256',
-      int: 'u256',
+      int: 'int', // Standard Python int for general use
       number: 'u256',
       boolean: 'bool',
       bool: 'bool',
@@ -576,8 +650,8 @@ class ${marketName}(gl.Contract):
       dict: 'TreeMap[str, str]',
       dictionary: 'TreeMap[str, str]',
       map: 'TreeMap[str, str]',
-      float: 'f64',
-      decimal: 'f64',
+      float: 'float', // Standard Python float (not f64)
+      decimal: 'float',
       bytes: 'bytes',
       timestamp: 'u256'
     };
@@ -590,7 +664,8 @@ class ${marketName}(gl.Contract):
     const defaults: { [key: string]: string } = {
       str: '""',
       u256: 'u256(0)',
-      f64: '0.0',
+      int: '0',
+      float: '0.0',
       bool: 'False',
       Address: "Address('0x0000000000000000000000000000000000000000')",
       bytes: "b''"
@@ -658,7 +733,7 @@ class ${contractName}(gl.Contract):
             Return JSON: {{"validity": true/false, "category": "governance/technical/financial"}}"""
             return gl.nondet.exec_prompt(task)
         
-        analysis_result = gl.eq_principle_strict_eq(analyze_proposal)
+        analysis_result = gl.eq_principle.strict_eq(analyze_proposal)
         self.proposal_count += u256(1)
         
         return {"proposal_id": int(self.proposal_count), "analysis": analysis_result}
@@ -691,7 +766,7 @@ class ${contractName}(gl.Contract):
             Return JSON: {{"approved": true/false, "violations": [], "severity": "low/medium/high"}}"""
             return gl.nondet.exec_prompt(task)
         
-        result = gl.eq_principle_prompt_non_comparative(
+        result = gl.eq_principle.prompt_non_comparative(
             analyze_content,
             task="Moderate content based on community guidelines",
             criteria="Fair and unbiased moderation decision"
@@ -727,7 +802,7 @@ class ${contractName}(gl.Contract):
             Return JSON: {{"sentiment": "positive/negative/neutral", "confidence": 0.0-1.0}}"""
             return gl.nondet.exec_prompt(task)
         
-        result = gl.eq_principle_strict_eq(sentiment_analysis)
+        result = gl.eq_principle.strict_eq(sentiment_analysis)
         self.analysis_count += u256(1)
         
         return {"analysis_id": int(self.analysis_count), "result": result, "topic": topic}
@@ -758,7 +833,7 @@ class ${contractName}(gl.Contract):
             Return JSON: {{"consensus_value": "value", "confidence": 0.0-1.0, "sources": 3}}"""
             return gl.nondet.exec_prompt(task)
         
-        result = gl.eq_principle_strict_eq(consensus_fetch)
+        result = gl.eq_principle.strict_eq(consensus_fetch)
         self.update_count += u256(1)
         
         return {"data_type": data_type, "query": query, "result": result, "update_id": int(self.update_count)}

@@ -705,5 +705,34 @@ export const toolDefinitions: Tool[] = [
       },
       required: ['project_name']
     }
+  },
+  {
+    name: 'fetch_latest_api_docs',
+    description:
+      'Fetch the latest GenLayer API documentation from the official source. Use this to get up-to-date information about GenLayer types, decorators, web access methods, LLM integration, consensus mechanisms, and more.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        topic: {
+          type: 'string',
+          description: 'Specific topic to fetch documentation for. Use "all" for complete documentation.',
+          enum: [
+            'types',
+            'decorators',
+            'web_access',
+            'llm',
+            'consensus',
+            'storage',
+            'events',
+            'contract_structure',
+            'message_access',
+            'evm_integration',
+            'all'
+          ],
+          default: 'all'
+        }
+      },
+      required: []
+    }
   }
 ];
