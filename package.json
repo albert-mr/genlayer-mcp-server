@@ -1,11 +1,11 @@
 {
-  "name": "@albert-mr/genlayer-mcp-server",
-  "version": "2.1.0",
+  "name": "genlayer-mcp",
+  "version": "2.2.0",
   "description": "MCP server for generating GenLayer Intelligent Contracts with AI-native blockchain capabilities",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "genlayer-mcp-server": "dist/index.js"
+    "genlayer-mcp": "dist/index.js"
   },
   "files": [
     "dist/**/*",

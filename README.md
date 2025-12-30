@@ -42,7 +42,7 @@ deploying intelligent contracts.
 **Add the MCP server** (no installation needed):
 Simply run this command in Claude Code:
 ```bash
-claude mcp add genlayer npx -- -y @albert-mr/genlayer-mcp-server@latest
+claude mcp add genlayer -- npx -y genlayer-mcp
 ```
 
 ### Alternative IDE Setup
@@ -58,7 +58,7 @@ Add to your MCP configuration:
       "command": "npx",
       "args": [
         "-y",
-        "@albert-mr/genlayer-mcp-server@latest"
+        "genlayer-mcp"
       ]
     }
   }
