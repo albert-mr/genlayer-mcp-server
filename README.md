@@ -10,8 +10,7 @@ GenLayer Intelligent Contracts with AI-native blockchain capabilities.
 ## ⚠️ Disclaimer
 
 **This project was created as an experimental proof-of-concept to test the
-capabilities of combining [Goose](https://github.com/block/goose) +
-[Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) and
+capabilities of combining [Goose](https://github.com/block/goose) and
 [Claude Code](https://github.com/anthropics/claude-code).** This has been
 vibecoded, so be aware of that. Errors or inconsistencies may occur.
 
@@ -39,8 +38,9 @@ deploying intelligent contracts.
 
 ### Quick Setup with Claude Code
 
-**Add the MCP server** (no installation needed):
-Simply run this command in Claude Code:
+**Add the MCP server** (no installation needed): Simply run this command in
+Claude Code:
+
 ```bash
 claude mcp add genlayer -- npx -y genlayer-mcp
 ```
@@ -49,17 +49,15 @@ claude mcp add genlayer -- npx -y genlayer-mcp
 
 For other IDEs that support MCP:
 
-**Use directly with npx** (no installation required):
-Add to your MCP configuration:
+**Use directly with npx** (no installation required): Add to your MCP
+configuration:
+
 ```json
 {
   "mcpServers": {
     "genlayer": {
       "command": "npx",
-      "args": [
-        "-y",
-        "genlayer-mcp"
-      ]
+      "args": ["-y", "genlayer-mcp"]
     }
   }
 }
@@ -155,5 +153,5 @@ for details.
 
 **Built with ❤️ for the GenLayer ecosystem**
 
-_Empowering developers to build the next generation of AI-powered decentralized
-applications_
+_This is not an official GenLayer repository. It is a community-maintained
+project._
